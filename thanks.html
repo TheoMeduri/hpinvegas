@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado! - Hp In Vegas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> <!-- Link para seu arquivo CSS existente -->
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="./" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <div class="logo-text">HP IN VEGAS</div>
+                </div>
+            </a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="./" class="nav-link"><i class="fas fa-home"></i> <span>Início</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container" style="margin-top: calc(var(--header-height) + var(--space-2xl)); padding-bottom: var(--space-2xl);">
+        <section class="thanks-section">
+            <div class="thanks-card">
+                <div class="thanks-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Obrigado!</h1>
+                <p class="thanks-subtitle">Sua mensagem foi enviada com sucesso.</p>
+                <p>Nossa equipe entrará em contato com você em breve. Enquanto isso, você pode explorar mais sobre nossos serviços ou voltar para a página inicial.</p>
+                
+                <div class="thanks-actions">
+                    <a href="./" class="btn btn-primary">
+                        <i class="fas fa-home"></i> Voltar ao Início
+                    </a>
+                    <a href="./" class="btn btn-outline">
+                        <i class="fa-regular fa-calendar"></i> Nossos Eventos
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-info" style="margin-top: var(--space-2xl);">
+            <div class="info-card">
+                <i class="fas fa-envelope"></i>
+                <h3>Email</h3>
+                <p>hpinvegas@gamil.com</p>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-clock"></i>
+                <h3>Horário</h3>
+                <p>Seg-Sex: 15h às 22h</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: var(--white); padding: var(--space-xl) 0; margin-top: auto; box-shadow: 0 -1px 3px rgba(0,0,0,0.1);">
+        <div class="container" style="text-align: center;">
+            <p style="color: var(--text-light); margin-bottom: var(--space-md);">© 2025 Hp In Vegas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+
+    <style>
+        /* Estilos específicos para a página de agradecimento */
+        .thanks-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+        
+        .thanks-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid var(--gray);
+        }
+        
+        .thanks-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: var(--space-lg);
+            animation: pulse 2s infinite;
+        }
+        
+        .thanks-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .thanks-actions {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-top: var(--space-xl);
+            flex-wrap: wrap;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .thanks-card {
+                padding: var(--space-xl);
+            }
+            
+            .thanks-actions {
+                flex-direction: column;
+            }
+            
+            .thanks-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HP TICKETS | Dashboard Administrativo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="ri-ticket-2-fill"></i>
+          <h2>HP TICKETS</h2>
+        </div>
+        <div class="user-profile">
+          <div class="avatar">AD</div>
+          <div class="user-info">
+            <span class="username">Admin</span>
+            <span class="role">Administrador</span>
+          </div>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active">
+          <i class="ri-dashboard-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#eventos" class="nav-item">
+          <i class="ri-calendar-event-line"></i>
+          <span>Criar Evento</span>
+        </a>
+        <a href="#lotes" class="nav-item">
+          <i class="ri-ticket-line"></i>
+          <span>Gerenciar Lotes</span>
+        </a>
+        <a href="#presencas" class="nav-item">
+          <i class="ri-user-follow-line"></i>
+          <span>Lista de Presença</span>
+        </a>
+        <a href="#relatorios" class="nav-item">
+          <i class="ri-calendar-line"></i>
+          <span>Ver Eventos</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <!-- <a href="#" class="nav-item">
+          <i class="ri-settings-3-line"></i>
+          <span>Configurações</span>
+        </a> -->
+        <a href="#" class="nav-item">
+          <i class="ri-logout-box-r-line"></i>
+          <span>Sair</span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-title">
+          <h1>Dashboard Administrativo</h1>
+          <p>Bem-vindo de volta, <span id="email"></span></p>
+        </div>
+        <div class="header-actions">
+          <div class="search-box">
+            <i class="ri-search-line"></i>
+            <input type="text" placeholder="Pesquisar...">
+          </div>
+          <button class="notification-btn" id="busca-rapida">
+            <i class="ri-notification-3-line"></i>
+            <span class="badge">3</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: #e3f2fd;">
+            <i class="ri-calendar-line" style="color: #2196f3;"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="total-eventos">0</h3>
+            <p>Eventos Criados</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: #e8f5e9;">
+            <i class="ri-ticket-line" style="color: #4caf50;"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="total-lotes">0</h3>
+            <p>Lotes Criados</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: #fff3e0;">
+            <i class="ri-user-line" style="color: #ff9800;"></i>
+          </div>
+          <div class="stat-info">
+            <h3 id="total-presencas">0</h3>
+            <p>Participantes</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: #f3e5f5;">
+            <i class="ri-money-dollar-circle-line" style="color: #9c27b0;"></i>
+          </div>
+          <div class="stat-info">
+            <h3>R$ <span id="total-vendas">0</span></h3>
+            <p>Total em Vendas</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="eventos">
+        <div class="card-header">
+          <h2><i class="ri-calendar-event-line"></i> Criar Novo Evento</h2>
+          <button class="card-action">
+            <i class="ri-add-line"></i> Adicionar
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="nome-evento">Nome do Evento</label>
+            <input type="text" id="nome-evento" placeholder="Ex: Festival de Música 2025">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="data-evento">Data</label>
+              <input type="date" id="data-evento">
+            </div>
+            <div class="form-group">
+              <label for="hora-evento">Hora</label>
+              <input type="time" id="hora-evento">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="local-evento">Local</label>
+            <input type="text" id="local-evento" placeholder="Ex: Centro de Convenções">
+          </div>
+          <div class="form-group">
+            <label for="descricao-evento">Descrição</label>
+            <textarea id="descricao-evento" rows="3" placeholder="Descreva seu evento..."></textarea>
+          </div>
+          <button class="primary-btn" id="criar-evento-btn">
+            <i class="ri-save-line"></i> Salvar Evento
+          </button>
+        </div>
+      </section>
+
+      <section class="card" id="lotes">
+        <div class="card-header">
+          <h2><i class="ri-ticket-line"></i> Gerenciar Lotes</h2>
+          <button class="card-action">
+            <i class="ri-filter-line"></i> Filtrar
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="evento-lote">Evento</label>
+            <select id="evento-lote">
+              
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome-lote">Nome do Lote</label>
+              <input type="text" id="nome-lote" placeholder="Ex: Lote Promocional">
+            </div>
+            <div class="form-group">
+              <label for="preco-lote">Preço (R$)</label>
+              <input type="number" id="preco-lote" min="0" step="0.01">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="quantidade-lote">Quantidade</label>
+              <input type="number" id="quantidade-lote" min="1">
+            </div>
+            <div class="form-group">
+              <label for="data-inicio-lote">Data de Início</label>
+              <input type="date" id="data-inicio-lote">
+            </div>
+          </div>
+          <button class="primary-btn" id="criar-lote-btn">
+            <i class="ri-add-circle-line"></i> Criar Lote
+          </button>
+        </div>
+      </section>
+
+      <section class="card" id="presencas">
+        <div class="card-header">
+          <h2><i class="ri-user-follow-line"></i> Lista de Presença</h2>
+          <div class="card-actions">
+            <button class="card-action" id="exportar-pdf-btn">
+              <i class="ri-file-pdf-line"></i> Gerar PDF
+            </button>
+            <button class="card-action" id="exportar-csv-btn">
+              <i class="ri-file-excel-line"></i> Exportar
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="evento-presenca">Selecione o Evento</label>
+            <select id="evento-presenca">
+              <option value="">Todos os Eventos</option>
+            </select>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Email</th>
+                  <th>Ingresso</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-presenca-body">
+                <tr>
+                  <td colspan="5" class="empty-state">
+                    <i class="ri-user-search-line"></i>
+                    <p>Nenhum participante encontrado</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+    <!-- Adicione no head -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <!-- jsPDF e autoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - IN VEGAS</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --danger: #f72585;
+      --success: #4cc9f0;
+      --text-light: #f8f9fa;
+      --bg-dark: #1f2937;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      color: var(--text-light);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo i {
+      font-size: 3rem;
+      color: var(--success);
+    }
+    
+    .logo h1 {
+      font-size: 1.8rem;
+      margin-top: 0.5rem;
+      background: linear-gradient(to right, #4cc9f0, #4361ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    .btn-google {
+      background: white;
+      color: #333;
+      margin-top: 1rem;
+    }
+    
+    .btn-google:hover {
+      background: #eee;
+    }
+    
+    .links {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    .links a {
+      color: var(--success);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .links a:hover {
+      text-decoration: underline;
+    }
+    
+    .separator {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .separator::before, .separator::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .separator::before {
+      margin-right: 1rem;
+    }
+    
+    .separator::after {
+      margin-left: 1rem;
+    }
+    
+    .notificacao {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--bg-dark);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transform: translateX(150%);
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+    
+    .notificacao.show {
+      transform: translateX(0);
+    }
+    
+    .notificacao.success {
+      border-left: 4px solid var(--success);
+    }
+    
+    .notificacao.error {
+      border-left: 4px solid var(--danger);
+    }
+    
+    .notificacao.warning {
+      border-left: 4px solid var(--warning);
+    }
+    
+    @media (max-width: 480px) {
+      .login-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <i class="ri-ticket-2-fill"></i>
+      <h1>IN VEGAS</h1>
+    </div>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required placeholder="seu@email.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" required placeholder="••••••••">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">
+        <i class="ri-login-box-line"></i> Entrar
+      </button>
+    </form>
+    
+    <div class="links">
+      <a href="#" id="esqueci-senha">Esqueci minha senha</a>
+      <span> • </span>
+      <a href="#" id="criar-conta">Criar nova conta</a>
+    </div>
+    
+    <div class="separator">ou</div>
+    
+    <button class="btn btn-google" id="login-google">
+      <i class="ri-google-fill"></i> Entrar com Google
+    </button>
+  </div>
+  
+  <!-- Modal de Registro -->
+  <div id="registro-modal" style="display: none;">
+    <div class="modal-content">
+      <h2>Criar Nova Conta</h2>
+      <form id="registro-form">
+        <div class="form-group">
+          <label for="reg-nome">Nome Completo</label>
+          <input type="text" id="reg-nome" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-senha">Senha</label>
+          <input type="password" id="reg-senha" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label for="reg-confirma-senha">Confirmar Senha</label>
+          <input type="password" id="reg-confirma-senha" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Modal de Recuperação de Senha -->
+  <div id="recuperacao-modal" style="display: none;">
+    <div class="modal-content">
+      <h2>Recuperar Senha</h2>
+      <form id="recuperacao-form">
+        <div class="form-group">
+          <label for="rec-email">Email</label>
+          <input type="email" id="rec-email" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Link</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  
+  <!-- Seu script -->
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLfdhCxEatG1o1YhjwB9bcA8ku2s2_siA",
+      authDomain: "hpinvegas-2f531.firebaseapp.com",
+      projectId: "hpinvegas-2f531",
+      storageBucket: "hpinvegas-2f531.appspot.com",
+      messagingSenderId: "67519536188",
+      appId: "1:67519536188:web:ccf4c12a861b2efd463739"
+    };
+    
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    
+    // Elementos do DOM
+    const loginForm = document.getElementById('login-form');
+    const registroForm = document.getElementById('registro-form');
+    const recuperacaoForm = document.getElementById('recuperacao-form');
+    const loginGoogleBtn = document.getElementById('login-google');
+    const esqueciSenhaLink = document.getElementById('esqueci-senha');
+    const criarContaLink = document.getElementById('criar-conta');
+    const registroModal = document.getElementById('registro-modal');
+    const recuperacaoModal = document.getElementById('recuperacao-modal');
+    
+    // Mostrar notificação
+    function mostrarNotificacao(mensagem, tipo = 'info') {
+      const notificacao = document.createElement('div');
+      notificacao.className = `notificacao ${tipo}`;
+      notificacao.innerHTML = `
+        <i class="ri-${tipo === 'success' ? 'checkbox-circle' : 
+                         tipo === 'error' ? 'close-circle' : 
+                         'information'}-line"></i>
+        <span>${mensagem}</span>
+      `;
+      
+      document.body.appendChild(notificacao);
+      
+      setTimeout(() => {
+        notificacao.classList.add('show');
+      }, 10);
+      
+      setTimeout(() => {
+        notificacao.classList.remove('show');
+        setTimeout(() => {
+          notificacao.remove();
+        }, 300);
+      }, 5000);
+    }
+    
+    // Login com email/senha
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      
+      auth.signInWithEmailAndPassword(email, senha)
+        .then((userCredential) => {
+          // Login bem-sucedido
+          mostrarNotificacao('Login realizado com sucesso!', 'success');
+          // Redireciona para a página principal após 1 segundo
+          setTimeout(() => {
+            window.location.href = './';
+          }, 1000);
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          mostrarNotificacao(errorMessage, 'error');
+        });
+    });
+    
+    // Login com Google
+    loginGoogleBtn.addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          // Login bem-sucedido
+          mostrarNotificacao('Login com Google realizado!', 'success');
+          setTimeout(() => {
+            window.location.href = './';
+          }, 1000);
+        })
+        .catch((error) => {
+          mostrarNotificacao(error.message, 'error');
+        });
+    });
+    
+    // Mostrar modal de registro
+    criarContaLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      registroModal.style.display = 'block';
+    });
+    
+    // Mostrar modal de recuperação
+    esqueciSenhaLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      recuperacaoModal.style.display = 'block';
+    });
+    
+    // Registrar nova conta
+    registroForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('reg-nome').value;
+      const email = document.getElementById('reg-email').value;
+      const senha = document.getElementById('reg-senha').value;
+      const confirmaSenha = document.getElementById('reg-confirma-senha').value;
+      
+      if (senha !== confirmaSenha) {
+        mostrarNotificacao('As senhas não coincidem!', 'error');
+        return;
+      }
+      
+      auth.createUserWithEmailAndPassword(email, senha)
+        .then((userCredential) => {
+          // Atualiza o nome do usuário
+          return userCredential.user.updateProfile({
+            displayName: nome
+          });
+        })
+        .then(() => {
+          mostrarNotificacao('Conta criada com sucesso!', 'success');
+          registroModal.style.display = 'none';
+          registroForm.reset();
+        })
+        .catch((error) => {
+          mostrarNotificacao(error.message, 'error');
+        });
+    });
+    
+    // Recuperação de senha
+    recuperacaoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('rec-email').value;
+      
+      auth.sendPasswordResetEmail(email)
+        .then(() => {
+          mostrarNotificacao('Email de recuperação enviado!', 'success');
+          recuperacaoModal.style.display = 'none';
+          recuperacaoForm.reset();
+        })
+        .catch((error) => {
+          mostrarNotificacao(error.message, 'error');
+        });
+    });
+    
+    // Fechar modais ao clicar fora
+    window.addEventListener('click', (e) => {
+      if (e.target === registroModal) {
+        registroModal.style.display = 'none';
+      }
+      if (e.target === recuperacaoModal) {
+        recuperacaoModal.style.display = 'none';
+      }
+    });
+    
+    // Verifica se o usuário já está logado
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // Se já estiver logado, redireciona para o dashboard
+        window.location.href = './';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IN VEGAS | Os Melhores Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header-container">
+      <a href="#" class="logo">
+        <i class="ri-sparkling-2-fill logo-icon"></i>
+        <div>
+          <span class="logo-text">HP IN VEGAS</span>
+        </div>
+      </a>
+      
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="#lista-eventos" class="nav-link"><i class="ri-calendar-line"></i> <span>Eventos</span></a></li>
+          <li><a href="#faq-section" class="nav-link"><i class="ri-information-line"></i> <span>Dúvidas</span></a></li>
+          <li><a href="#" class="nav-link"><i class="ri-contacts-line"></i> <span>Contato</span></a></li>
+          <li><a href="#" class="nav-link"><i class="ri-user-line"></i> <span>Perfil</span></a></li>
+        </ul>
+        
+        <!-- <div class="search-bar">
+          <button class="btn btn-icon"><i class="ri-search-line"></i></button>
+          <input type="text" placeholder="Pesquisar eventos..." class="form-input">
+        </div> -->
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="lista-eventos">
+    <br><br><br><br>
+    <section class="eventos">
+      <h1>Eventos</h1>
+      <div class="eventos-grid">
+        <!-- Eventos serão inseridos via script -->
+      </div>
+    </section>
+
+    <section class="form-section" id="form-compra" style="display: none;">
+      <h2 class="form-title" id="titulo-evento"></h2>
+      <form onsubmit="event.preventDefault(); finalizarCompra();">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nome" class="form-label"><i class="ri-user-line"></i> Nome completo</label>
+            <input type="text" id="nome" class="form-input" required placeholder="Seu nome completo" />
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label"><i class="ri-mail-line"></i> Email</label>
+            <input type="email" id="email" class="form-input" required placeholder="seu@email.com" />
+          </div>
+          
+          <div class="form-group">
+            <label for="idade" class="form-label"><i class="ri-calendar-line"></i> Idade</label>
+            <select id="idade" class="form-select">
+              <option disabled selected>Selecione sua idade</option>
+              <option value="13">13 anos</option>
+              <option value="14">14 anos</option>
+              <option value="15">15 anos</option>
+              <option value="16">16 anos</option>
+              <option value="17">17 anos</option>
+              <option value="18">18 anos</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="rg" class="form-label"><i class="ri-profile-line"></i> RG</label>
+            <input type="text" id="rg" class="form-input" required placeholder="00.000.000-0" />
+          </div>
+          
+          <div class="form-group">
+            <label for="lote" class="form-label"><i class="ri-price-tag-3-line"></i> Lote</label>
+            <input type="text" id="lote" disabled class="form-input disabled-input" />
+          </div>
+
+          <div class="form-group">
+            <label for="restante" class="form-label"><i class="ri-ticket-2-line"></i> Ingressos restantes</label>
+            <input type="number" id="restante" disabled class="form-input disabled-input" />
+          </div>
+
+          <div class="form-group">
+            <label for="preco" class="form-label"><i class="ri-money-dollar-circle-line"></i> Valor total</label>
+            <input type="text" id="preco" disabled class="form-input disabled-input price-display" />
+          </div>
+
+          <div class="form-group">
+            <label for="quantidade" class="form-label"><i class="ri-shopping-cart-2-line"></i> Quantidade</label>
+            <div class="quantity-control">
+              <button type="button" class="btn btn-outline quantity-btn" id="decrease-qty"><i class="ri-subtract-line"></i></button>
+              <input type="number" id="quantidade" min="1" value="1" required class="form-input quantity-input" />
+              <button type="button" class="btn btn-outline quantity-btn" id="increase-qty"><i class="ri-add-line"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary submit-btn">
+          <i class="ri-wallet-3-line"></i> Finalizar Compra
+        </button>
+      </form>
+    </section>
+
+    <section class="faq-section" id="faq-section">
+  <div class="container">
+    <h1 class="faq-title">Dúvidas Frequentes</h1>
+    <div class="faqs">
+      <!-- FAQ Item 1 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>Como comprar ingressos para os eventos?</h3>
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Para comprar ingressos, basta selecionar o evento desejado na nossa página, escolher a quantidade de ingressos e preencher o formulário de compra. Você receberá os ingressos por e-mail após a confirmação do pagamento.</p>
+        </div>
+      </div>
+      
+      <!-- FAQ Item 2 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>Quais são as formas de pagamento aceitas?</h3>
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Devido nossas políticas de empresa, nós aceitamos apenas o pagamento feito via Pix com o QR CODE gerado pelo site no momento da compra.</p>
+        </div>
+      </div>
+      
+      <!-- FAQ Item 3 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>Posso cancelar ou transferir meu ingresso?</h3>
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+        <div class="faq-answer">
+          <p>O cancelamento pode ser solicitado até 7 dias antes do evento, com reembolso de 70% do valor. A transferência para outra pessoa é permitida até 24h antes do evento, mediante solicitação por e-mail.</p>
+        </div>
+      </div>
+      
+      <!-- FAQ Item 4 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>Há desconto para estudantes ou idosos?</h3>
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Sim, oferecemos 50% de desconto para estudantes e idosos em todos os eventos culturais. É necessário apresentar documento comprobatório no dia do evento.</p>
+        </div>
+      </div>
+      
+      <!-- FAQ Item 5 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          <h3>O que fazer se não receber meus ingressos por e-mail?</h3>
+          <i class="ri-arrow-down-s-line"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Verifique sua caixa de spam. Caso não encontre, entre em contato pelo nosso WhatsApp (11) 98765-4321 ou e-mail contato@invegas.com que resolveremos imediatamente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="contact-section" id="contato">
+  <div class="container">
+    <h2 class="section-title">Fale Conosco</h2>
+    <p class="section-subtitle">Tem dúvidas, sugestões ou parcerias? Envie sua mensagem!</p>
+    
+    <form class="contact-form" action="https://formsubmit.co/hpinvegas@gmail.com" method="POST">
+      <!-- Input oculto para redirecionamento após envio -->
+      <input type="hidden" name="_next" value="http://127.0.0.1:5500/thanks">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="basic">
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name" class="form-label">Nome Completo</label>
+          <input type="text" id="name" name="name" class="form-input" required placeholder="Seu nome">
+        </div>
+        
+        <div class="form-group">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" id="email" name="email" class="form-input" required placeholder="seu@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="phone" class="form-label">Telefone (opcional)</label>
+          <input type="tel" id="phone" name="phone" class="form-input" placeholder="(00) 00000-0000">
+        </div>
+        
+        <div class="form-group">
+          <label for="subject" class="form-label">Assunto</label>
+          <select id="subject" name="subject" class="form-select" required>
+            <option value="" disabled selected>Selecione um assunto</option>
+            <option value="Dúvida sobre eventos">Dúvida sobre eventos</option>
+            <option value="Parceria comercial">Parceria comercial</option>
+            <option value="Problema com ingresso">Problema com ingresso</option>
+            <option value="Sugestão">Sugestão</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="message" class="form-label">Mensagem</label>
+          <textarea id="message" name="message" class="form-textarea" rows="5" required placeholder="Escreva sua mensagem aqui..."></textarea>
+        </div>
+      </div>
+      
+      <div class="form-footer">
+        <button type="submit" class="btn btn-primary">
+          <i class="ri-send-plane-fill"></i> Enviar Mensagem
+        </button>
+      </div>
+    </form>
+    
+  </div>
+</section>
+
+<section class="profile-section" id="perfil">
+  <h1>Perfil</h1>
+  <!-- Se o usuário estiver logado, esta estrutura será carregada -->
+  <div class="profile-header">
+    <div class="profile-avatar">JS</div>
+    <div class="profile-info">
+      <h1 class="profile-name">João Silva</h1>
+      <div class="profile-email">
+        <i class="fas fa-envelope"></i>
+        <span>joao.silva@example.com</span>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-value">12</span>
+          <span class="stat-label">Eventos Concluídos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">8</span>
+          <span class="stat-label">Tickets Comprados</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="profile-content">
+    <div class="profile-card">
+      <h2><i class="fas fa-calendar-check"></i> Últimos Eventos</h2>
+      <div class="event-list">
+        <!-- Eventos serão carregados dinamicamente -->
+      </div>
+    </div>
+    
+    <div class="profile-card">
+      <h2><i class="fas fa-ticket-alt"></i> Tickets Recentes</h2>
+      <div class="ticket-list">
+        <!-- Tickets serão carregados dinamicamente -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Se o usuário NÃO estiver logado, o script substituirá todo o conteúdo por:
+  <div class="login-prompt">...</div>
+  -->
+</section>
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <i class="fa-solid fa-ticket"></i>
+        <span>HP IN VEGAS</span>
+      </div>
+      <p class="footer-slogan">Sua plataforma de eventos favorita</p>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    
+    <div class="footer-links">
+      <div class="links-column">
+        <h3 class="links-title">Eventos</h3>
+        <ul>
+          <li><a href="#">Próximos Eventos</a></li>
+        </ul>
+      </div>
+      
+      <div class="links-column">
+        <h3 class="links-title">Sua Conta</h3>
+        <ul>
+          <li><a href="#perfil">Meu Perfil</a></li>
+          <li><a href="#perfil">Meus Tickets</a></li>
+        </ul>
+      </div>
+      
+      <div class="links-column">
+        <h3 class="links-title">Ajuda</h3>
+        <ul>
+          <li><a href="#contato">Contate-nos</a></li>
+          <li><a href="hpinvegas@gmail.com">Email de Contato</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="footer-bottom-content">
+      <p>&copy; 2025 Hp In Vegas. Todos os direitos reservados.</p>
+      <div class="payment-methods">
+        <i class="fa-brands fa-pix"></i>
+      </div>
+    </div>
+  </div>
+</footer>
+  </main>
+  
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
