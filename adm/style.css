@@ -618,3 +618,284 @@ tr:hover td {
   }
 }
 
+/* Tabs */
+.form-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Lotes */
+.lote-item {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 1rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secondary-btn {
+  background: var(--bg-secondary);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 1.5rem;
+}
+
+.secondary-btn:hover {
+  background: rgba(67, 97, 238, 0.1);
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: var(--bg-primary);
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.modal .close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.modal .close:hover {
+  color: var(--text-primary);
+}
+
+/* Table Actions */
+.table-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .form-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .tab-btn {
+    padding: 0.75rem 1rem;
+  }
+  
+  .modal-content {
+    margin: 20% auto;
+    width: 95%;
+  }
+}
+
+/* Estilos para a seção de ingressos */
+.ingresso-card {
+  background: white;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.ingresso-header {
+  background: var(--primary);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingresso-codigo {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.ingresso-status {
+  background: white;
+  color: var(--primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.ingresso-body {
+  padding: 1.5rem;
+}
+
+.ingresso-info {
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.info-label {
+  font-weight: bold;
+  width: 100px;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  flex: 1;
+}
+
+.ingresso-qr {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-bar input {
+  flex: 1;
+}
+
+/* Estilo base para os botões de ação */
+.action-btn {
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin: 0 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Botão Validar */
+.action-btn.validate {
+  background-color: #4CAF50; /* Verde */
+}
+
+.action-btn.validate:hover {
+  background-color: #3e8e41;
+  transform: scale(1.1);
+}
+
+.action-btn.validate:active {
+  transform: scale(0.95);
+}
+
+/* Botão Excluir */
+.action-btn.delete {
+  background-color: #f44336; /* Vermelho */
+}
+
+.action-btn.delete:hover {
+  background-color: #d32f2f;
+  transform: scale(1.1);
+}
+
+.action-btn.delete:active {
+  transform: scale(0.95);
+}
+
+/* Efeito de foco para acessibilidade */
+.action-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* Ícones dentro dos botões */
+.action-btn i {
+  pointer-events: none; /* Permite clicar no ícone sem interferência */
+}
+
+/* Status dos ingressos (opcional, pode adicionar ao seu CSS existente) */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.validado {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.pendente {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+.lote-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}

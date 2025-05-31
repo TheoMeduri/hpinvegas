@@ -32,29 +32,17 @@
           <i class="ri-dashboard-line"></i>
           <span>Dashboard</span>
         </a>
-        <a href="#eventos" class="nav-item">
+        <a href="#gerenciar-eventos" class="nav-item">
           <i class="ri-calendar-event-line"></i>
-          <span>Criar Evento</span>
+          <span>Gerenciar Eventos</span>
         </a>
-        <a href="#lotes" class="nav-item">
-          <i class="ri-ticket-line"></i>
-          <span>Gerenciar Lotes</span>
-        </a>
-        <a href="#presencas" class="nav-item">
+        <a href="#lista-presenca" class="nav-item">
           <i class="ri-user-follow-line"></i>
           <span>Lista de Presença</span>
-        </a>
-        <a href="#relatorios" class="nav-item">
-          <i class="ri-calendar-line"></i>
-          <span>Ver Eventos</span>
         </a>
       </nav>
       
       <div class="sidebar-footer">
-        <!-- <a href="#" class="nav-item">
-          <i class="ri-settings-3-line"></i>
-          <span>Configurações</span>
-        </a> -->
         <a href="#" class="nav-item">
           <i class="ri-logout-box-r-line"></i>
           <span>Sair</span>
@@ -71,7 +59,7 @@
         <div class="header-actions">
           <div class="search-box">
             <i class="ri-search-line"></i>
-            <input type="text" placeholder="Pesquisar...">
+            <input type="text" id="search-input" placeholder="Pesquisar eventos...">
           </div>
           <button class="notification-btn" id="busca-rapida">
             <i class="ri-notification-3-line"></i>
@@ -97,7 +85,7 @@
           </div>
           <div class="stat-info">
             <h3 id="total-lotes">0</h3>
-            <p>Lotes Criados</p>
+            <p>Lotes Ativos</p>
           </div>
         </div>
         
@@ -122,103 +110,231 @@
         </div>
       </section>
 
-      <section class="card" id="eventos">
+      <section class="card" id="gerenciar-eventos">
         <div class="card-header">
-          <h2><i class="ri-calendar-event-line"></i> Criar Novo Evento</h2>
-          <button class="card-action">
-            <i class="ri-add-line"></i> Adicionar
-          </button>
+          <h2><i class="ri-calendar-event-line"></i> Gerenciar Eventos</h2>
+          <div class="card-actions">
+            <button class="card-action" id="filtrar-eventos-btn">
+              <i class="ri-filter-line"></i> Filtrar
+            </button>
+          </div>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <label for="nome-evento">Nome do Evento</label>
-            <input type="text" id="nome-evento" placeholder="Ex: Festival de Música 2025">
+          <div class="form-tabs">
+            <button class="tab-btn active" data-tab="criar-evento">Criar Evento</button>
+            <button class="tab-btn" data-tab="gerenciar-lotes">Gerenciar Lotes</button>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="data-evento">Data</label>
-              <input type="date" id="data-evento">
-            </div>
-            <div class="form-group">
-              <label for="hora-evento">Hora</label>
-              <input type="time" id="hora-evento">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="local-evento">Local</label>
-            <input type="text" id="local-evento" placeholder="Ex: Centro de Convenções">
-          </div>
-          <div class="form-group">
-            <label for="descricao-evento">Descrição</label>
-            <textarea id="descricao-evento" rows="3" placeholder="Descreva seu evento..."></textarea>
-          </div>
-          <button class="primary-btn" id="criar-evento-btn">
-            <i class="ri-save-line"></i> Salvar Evento
-          </button>
-        </div>
-      </section>
-
-      <section class="card" id="lotes">
-        <div class="card-header">
-          <h2><i class="ri-ticket-line"></i> Gerenciar Lotes</h2>
-          <button class="card-action">
-            <i class="ri-filter-line"></i> Filtrar
-          </button>
-        </div>
-        <div class="card-body">
-          <div class="form-group">
-            <label for="evento-lote">Evento</label>
-            <select id="evento-lote">
+          
+          <div id="criar-evento" class="tab-content active">
+            <form id="evento-form">
+              <div class="form-group">
+                <label for="nome-evento">Nome do Evento</label>
+                <input type="text" id="nome-evento" placeholder="Ex: Festival de Música 2025">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="data-evento">Data</label>
+                  <input type="date" id="data-evento">
+                </div>
+                <div class="form-group">
+                  <label for="hora-evento">Hora</label>
+                  <input type="time" id="hora-evento">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="local-evento">Local</label>
+                <input type="text" id="local-evento" placeholder="Ex: Centro de Convenções">
+              </div>
+              <div class="form-group">
+                <label for="descricao-evento">Descrição</label>
+                <textarea id="descricao-evento" rows="3" placeholder="Descreva seu evento..."></textarea>
+              </div>
               
-            </select>
+              <h3 class="section-title"><i class="ri-price-tag-3-line"></i> Lotes de Ingressos</h3>
+              
+              <div id="lotes-container">
+                <div class="lote-item">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="nome-lote">Nome do Lote</label>
+                      <input type="text" class="nome-lote" placeholder="Ex: Lote Promocional">
+                    </div>
+                    <div class="form-group">
+                      <label for="preco-lote">Preço (R$)</label>
+                      <input type="number" class="preco-lote" min="0" step="0.01">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="quantidade-lote">Quantidade</label>
+                      <input type="number" class="quantidade-lote" min="1">
+                    </div>
+                    <div class="form-group">
+                      <label for="data-inicio-lote">Data de Início</label>
+                      <input type="date" class="data-inicio-lote">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <button type="button" class="secondary-btn" id="adicionar-lote-btn">
+                <i class="ri-add-line"></i> Adicionar Lote
+              </button>
+              
+              <button type="submit" class="primary-btn" id="criar-evento-btn">
+                <i class="ri-save-line"></i> Salvar Evento e Lotes
+              </button>
+            </form>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="nome-lote">Nome do Lote</label>
-              <input type="text" id="nome-lote" placeholder="Ex: Lote Promocional">
-            </div>
-            <div class="form-group">
-              <label for="preco-lote">Preço (R$)</label>
-              <input type="number" id="preco-lote" min="0" step="0.01">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="quantidade-lote">Quantidade</label>
-              <input type="number" id="quantidade-lote" min="1">
-            </div>
-            <div class="form-group">
-              <label for="data-inicio-lote">Data de Início</label>
-              <input type="date" id="data-inicio-lote">
-            </div>
-          </div>
-          <button class="primary-btn" id="criar-lote-btn">
-            <i class="ri-add-circle-line"></i> Criar Lote
-          </button>
+          
+<div id="gerenciar-lotes" class="tab-content">
+  <h3>Gerenciar Lotes de Ingressos</h3>
+  
+  <div class="form-group">
+    <label for="evento-selecionado">Selecione o Evento</label>
+    <select id="evento-selecionado">
+      <option value="">Selecione um evento</option>
+      <!-- Opções serão preenchidas via JavaScript -->
+    </select>
+  </div>
+
+  <div id="lotes-disponiveis" class="lotes-container2">
+    <!-- Lotes serão carregados aqui -->
+  </div>
+</div>
         </div>
       </section>
 
-      <section class="card" id="presencas">
+      <!-- Seção de Venda de Ingressos -->
+<section class="card" id="vender-ingressos">
+  <div class="card-header">
+    <h2><i class="ri-ticket-2-line"></i> Vender Ingressos</h2>
+  </div>
+  <div class="card-body">
+    <form id="ingresso-form">
+      <div class="form-group">
+        <label for="evento-ingresso">Selecione o Evento</label>
+        <select id="evento-ingresso" required>
+          <option value="">Carregando eventos...</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="lote-ingresso">Selecione o Lote</label>
+        <select id="lote-ingresso" required disabled>
+          <option value="">Selecione um evento primeiro</option>
+        </select>
+      </div>
+      
+      <h3 class="section-title"><i class="ri-user-line"></i> Dados do Participante</h3>
+      
+      <div class="form-group">
+        <label for="nome-ingresso">Nome Completo</label>
+        <input type="text" id="nome-ingresso" required>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email-ingresso">Email</label>
+          <input type="email" id="email-ingresso" required>
+        </div>
+        <div class="form-group">
+          <label for="telefone-ingresso">Telefone</label>
+          <input type="tel" id="telefone-ingresso" required>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="rg-ingresso">RG</label>
+          <input type="text" id="rg-ingresso" required>
+        </div>
+        <div class="form-group">
+          <label for="idade-ingresso">Idade</label>
+          <input type="number" id="idade-ingresso" min="13" max="120" required>
+        </div>
+      </div>
+      
+      <button type="submit" class="primary-btn">
+        <i class="ri-check-line"></i> Gerar Ingresso
+      </button>
+    </form>
+    
+    <div id="ingresso-gerado" style="display: none; margin-top: 2rem;">
+      <h3 class="section-title"><i class="ri-ticket-line"></i> Ingresso Gerado</h3>
+      <div class="ingresso-card">
+        <div class="ingresso-header">
+          <span class="ingresso-codigo" id="codigo-ingresso">HP-XXXXXX</span>
+          <span class="ingresso-status">Pendente</span>
+        </div>
+        <div class="ingresso-body">
+          <div class="ingresso-info">
+            <span class="info-label">Evento:</span>
+            <span class="info-value" id="ingresso-evento">Nome do Evento</span>
+          </div>
+          <div class="ingresso-info">
+            <span class="info-label">Participante:</span>
+            <span class="info-value" id="ingresso-participante">Nome do Participante</span>
+          </div>
+          <div class="ingresso-info">
+            <span class="info-label">Lote:</span>
+            <span class="info-value" id="ingresso-lote">Nome do Lote</span>
+          </div>
+          <div class="ingresso-info">
+            <span class="info-label">Valor:</span>
+            <span class="info-value" id="ingresso-preco">R$ 0,00</span>
+          </div>
+        </div>
+        <div class="ingresso-qr">
+          <canvas id="qr-code-ingresso"></canvas>
+        </div>
+      </div>
+      <button class="secondary-btn" id="imprimir-ingresso" style="margin-top: 1rem;">
+        <i class="ri-printer-line"></i> Imprimir Ingresso
+      </button>
+    </div>
+  </div>
+</section>
+
+
+      <section class="card" id="lista-presenca">
         <div class="card-header">
           <h2><i class="ri-user-follow-line"></i> Lista de Presença</h2>
           <div class="card-actions">
+            
+            <button class="card-action" id="renomear-lista-btn">
+              <i class="ri-edit-line"></i> Renomear
+            </button>
             <button class="card-action" id="exportar-pdf-btn">
-              <i class="ri-file-pdf-line"></i> Gerar PDF
+              <i class="ri-file-pdf-line"></i> PDF
             </button>
             <button class="card-action" id="exportar-csv-btn">
-              <i class="ri-file-excel-line"></i> Exportar
+              <i class="ri-file-excel-line"></i> CSV
             </button>
           </div>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <label for="evento-presenca">Selecione o Evento</label>
-            <select id="evento-presenca">
-              <option value="">Todos os Eventos</option>
-            </select>
+          <div class="search-bar">
+  <input type="text" id="busca-codigo" placeholder="Digite o código do ingresso">
+  <button class="primary-btn" id="buscar-ingresso-btn">
+    <i class="ri-search-line"></i> Buscar
+  </button>
+</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="evento-presenca">Selecione o Evento</label>
+              <select id="evento-presenca">
+                <option value="">Carregando eventos...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="nome-lista">Nome da Lista</label>
+              <input type="text" id="nome-lista" placeholder="Ex: Lista VIP">
+            </div>
           </div>
+          
           <div class="table-responsive">
-            <table>
+            <table id="tabela-presenca">
               <thead>
                 <tr>
                   <th>Nome</th>
@@ -232,25 +348,44 @@
                 <tr>
                   <td colspan="5" class="empty-state">
                     <i class="ri-user-search-line"></i>
-                    <p>Nenhum participante encontrado</p>
+                    <p>Selecione um evento para visualizar a lista de presença</p>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+          
+          <div class="table-actions">
+            <button class="primary-btn" id="atualizar-lista-btn">
+              <i class="ri-refresh-line"></i> Atualizar Lista
+            </button>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-    <!-- Adicione no head -->
+  <!-- Modal para renomear lista -->
+  <div id="renomear-lista-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Renomear Lista de Presença</h2>
+      <form id="renomear-lista-form">
+        <div class="form-group">
+          <label for="novo-nome-lista">Novo Nome</label>
+          <input type="text" id="novo-nome-lista" required>
+        </div>
+        <button type="submit" class="primary-btn">Salvar Alterações</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-  <!-- jsPDF e autoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-
   <script src="script.js"></script>
 </body>
 </html>
