@@ -538,8 +538,8 @@ function converterStringParaData(dataString) {
         pastTicketsContainer.innerHTML = '';
         
         if (snapshot.empty) {
-          activeTicketsContainer.innerHTML = '<div class="no-tickets">Visualize seus ingressos em <a href="/redeem">Ingressos Resgatados</a></div>';
-          pastTicketsContainer.innerHTML = '<div class="no-tickets">Visualize seus ingressos em <a href="/redeem">Ingressos Resgatados</a></div>';
+          activeTicketsContainer.innerHTML = '<div class="no-tickets">Visualize seus ingressos em <a href="/hpinvegas/redeem">Ingressos Resgatados</a></div>';
+          pastTicketsContainer.innerHTML = '<div class="no-tickets">Visualize seus ingressos em <a href="/hpinvegas/redeem">Ingressos Resgatados</a></div>';
           return;
         }
         
