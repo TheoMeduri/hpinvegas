@@ -1337,3 +1337,272 @@ textarea:focus {
     text-align: center;
   }
 }
+
+ /* Seus estilos CSS anteriores aqui */
+    
+    /* Novos estilos para o sistema de ingressos */
+    .ticket-section {
+      display: none;
+      margin-top: 2rem;
+    }
+    
+    .ticket-form-container {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .ticket-form-title {
+      font-size: 1.25rem;
+      margin-bottom: var(--space-lg);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .payment-section {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow);
+      margin-top: var(--space-xl);
+      display: none;
+    }
+    
+    .payment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .payment-total {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .payment-method {
+      border: 2px solid var(--gray);
+      border-radius: var(--radius);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+    
+    .payment-method:hover {
+      border-color: var(--primary);
+    }
+    
+    .payment-method.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    
+    .payment-method i {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
+      color: var(--primary);
+    }
+    
+    .qr-code-container {
+      text-align: center;
+      margin: var(--space-xl) 0;
+      padding: var(--space-md);
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .payment-confirm {
+      display: none;
+      text-align: center;
+      margin-top: var(--space-xl);
+    }
+    
+    .ticket-card {
+      background: linear-gradient(135deg, #4361ee, #3a0ca3);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ticket-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 30px;
+      width: 2px;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 10px,
+        white 10px,
+        white 20px
+      );
+    }
+    
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    
+    .ticket-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .ticket-id {
+      background: var(--white);
+      color: var(--primary);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius);
+      font-weight: 600;
+    }
+    
+    .ticket-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    
+    .ticket-detail {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .ticket-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+    
+    .ticket-value {
+      font-weight: 600;
+    }
+    
+    .ticket-qr {
+      text-align: center;
+      margin-top: var(--space-md);
+    }
+    
+    .ticket-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px dashed rgba(255, 255, 255, 0.3);
+    }
+    
+    .ticket-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .ticket-status {
+      background: var(--white);
+      color: var(--primary);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    
+    .ticket-status.paid {
+      background: var(--success);
+      color: white;
+    }
+    
+    .ticket-status.pending {
+      background: var(--warning);
+      color: white;
+    }
+    
+    .tickets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    
+    .past-events {
+      margin-top: var(--space-2xl);
+    }
+    
+    .event-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--gray);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .event-tab {
+      padding: var(--space-sm) var(--space-lg);
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-light);
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+    }
+    
+    .event-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    
+    .event-tab-content {
+      display: none;
+    }
+    
+    .event-tab-content.active {
+      display: block;
+    }
+    
+    .edit-ticket-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: none;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+    
+    .edit-ticket-btn:hover {
+      background: var(--primary-light);
+    }
+    
+    @media (max-width: 768px) {
+      .ticket-card::before {
+        left: 20px;
+      }
+      
+      .ticket-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+      }
+      
+      .ticket-details {
+        grid-template-columns: 1fr;
+      }
+    }

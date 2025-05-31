@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HP TICKETS | Redeem</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+  <!-- Adicionando Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #6e48aa;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      color: #666;
+      font-weight: 400;
+    }
+    
+    .search-container {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+    
+    .search-bar {
+      display: flex;
+      background: white;
+      border-radius: 50px;
+      padding: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .event-select {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      outline: none;
+      background: white;
+      border: none;
+      border-radius: 50px;
+      padding: 1.2rem 1.3rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      color: #666;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1.3rem center;
+      background-size: 1em;
+    }
+    
+    .search-input {
+      flex: 1;
+      border: none;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      outline: none;
+      background: transparent;
+    }
+    
+    .search-button {
+      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 0 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .ticket-status {
+      background: white;
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .status-icon {
+      font-size: 3rem;
+      color: #6e48aa;
+      margin-bottom: 1rem;
+    }
+    
+    .status-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    
+    .status-message {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    
+    .try-again {
+      color: #6e48aa;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    /* Modal de login */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #6e48aa;
+      text-align: center;
+    }
+    
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #666;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .auth-button {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    
+    .auth-switch {
+      text-align: center;
+      color: #666;
+    }
+    
+    .auth-switch a {
+      color: #6e48aa;
+      cursor: pointer;
+    }
+
+    
+    
+    /* Estilo aprimorado para o ticket encontrado */
+.ticket-info {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  margin: 2rem auto;
+  text-align: left;
+  border: 1px solid rgba(110, 72, 170, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(to bottom, #6e48aa, #9d50bb);
+}
+
+.ticket-info:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.ticket-info h3 {
+  color: #6e48aa;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.ticket-info h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(to right, #6e48aa, #9d50bb);
+  border-radius: 3px;
+}
+
+.ticket-info p {
+  margin-bottom: 1rem;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ticket-info strong {
+  color: #333;
+  font-weight: 500;
+  min-width: 100px;
+  display: inline-block;
+}
+
+.ticket-info span {
+  color: #444;
+  font-weight: 400;
+  flex: 1;
+}
+
+.redeem-button {
+  background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.2);
+}
+
+.redeem-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(110, 72, 170, 0.3);
+}
+
+.redeem-button:active {
+  transform: translateY(0);
+}
+
+.redeem-button:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Efeito de loading no botão */
+.redeem-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.redeem-button.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .ticket-info {
+    padding: 1.5rem;
+    margin: 1rem auto;
+  }
+  
+  .ticket-info h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .ticket-info p {
+    font-size: 0.9rem;
+    flex-direction: column;
+  }
+  
+  .ticket-info strong {
+    min-width: auto;
+    margin-bottom: 0.2rem;
+  }
+}
+    .redeem-button {
+      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem;
+      width: 100%;
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    .redeem-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 1.5rem;
+      }
+      
+      .logo {
+        font-size: 1.8rem;
+      }
+      
+      .search-button span {
+        display: none;
+      }
+      
+      .search-button {
+        padding: 0 1rem;
+      }
+      
+      .event-select {
+        padding: 0.8rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">HP TICKETS</div>
+    <div class="subtitle">Validação de ingressos</div>
+  </div>
+  
+  <div class="search-container">
+    <select class="event-select" id="eventSelect">
+      <option value="" selected disabled>Carregando eventos...</option>
+    </select>
+    <div class="search-bar">
+      <input type="text" class="search-input" id="ticketCode" placeholder="Selecione um evento primeiro" disabled>
+      <button class="search-button" id="searchButton">
+        <i class="ri-search-line"></i>
+        <span>Buscar</span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="ticket-status" id="ticketStatus">
+    <div class="status-icon">
+      <i class="ri-menu-search-line"></i>
+    </div>
+    <h2 class="status-title">Encontre seu Ingresso</h2>
+    <p class="status-message">Selecione o evento correspondente ao seu ingresso e, em seguida, insira o código que foi fornecido pela nossa equipe no momento da compra.</p>
+    <a href="#" class="try-again" id="tryAgain">
+      <i class="ri-refresh-line"></i>
+      Começar
+    </a>
+  </div>
+  
+    <div id="userTickets" class="ticket-info" style="display: none; margin-top: 2rem;">
+        <h3>Seus Ingressos Resgatados</h3>
+        <div id="ticketsList"></div>
+    </div>
+
+  <div id="ticketInfo" class="ticket-info" style="display: none;">
+    <h3>Informações do Ingresso</h3>
+    <p><strong>Evento:</strong> <span id="ticketEvent"></span></p>
+    <p><strong>Código:</strong> <span id="ticketId"></span></p>
+    <p><strong>Tipo:</strong> <span id="ticketType"></span></p>
+    <p><strong>Status:</strong> <span id="ticketStatusInfo"></span></p>
+    <button id="redeemButton" class="redeem-button">Resgatar Ingresso</button>
+  </div>
+
+  <!-- Modal de Login -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle">Entrar</h2>
+      <div id="loginForm">
+        <div class="input-group">
+          <label for="loginEmail">E-mail</label>
+          <input type="email" id="loginEmail" placeholder="Seu e-mail">
+        </div>
+        <div class="input-group">
+          <label for="loginPassword">Senha</label>
+          <input type="password" id="loginPassword" placeholder="Sua senha">
+        </div>
+        <button id="loginButton" class="auth-button">Entrar</button>
+        <div class="auth-switch">
+          Não tem uma conta? <a id="switchToRegister">Criar conta</a>
+        </div>
+      </div>
+      
+      <div id="registerForm" style="display: none;">
+        <div class="input-group">
+          <label for="registerName">Nome</label>
+          <input type="text" id="registerName" placeholder="Seu nome completo">
+        </div>
+        <div class="input-group">
+          <label for="registerEmail">E-mail</label>
+          <input type="email" id="registerEmail" placeholder="Seu e-mail">
+        </div>
+        <div class="input-group">
+          <label for="registerPassword">Senha</label>
+          <input type="password" id="registerPassword" placeholder="Sua senha (mínimo 6 caracteres)">
+        </div>
+        <div class="input-group">
+          <label for="registerConfirmPassword">Confirmar Senha</label>
+          <input type="password" id="registerConfirmPassword" placeholder="Confirme sua senha">
+        </div>
+        <button id="registerButton" class="auth-button">Criar Conta</button>
+        <div class="auth-switch">
+          Já tem uma conta? <a id="switchToLogin">Entrar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLfdhCxEatG1o1YhjwB9bcA8ku2s2_siA",
+      authDomain: "hpinvegas-2f531.firebaseapp.com",
+      projectId: "hpinvegas-2f531",
+      storageBucket: "hpinvegas-2f531.appspot.com",
+      messagingSenderId: "67519536188",
+      appId: "1:67519536188:web:ccf4c12a861b2efd463739"
+    };
+
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // Elementos da DOM
+    const eventSelect = document.getElementById('eventSelect');
+    const ticketCode = document.getElementById('ticketCode');
+    const searchButton = document.getElementById('searchButton');
+    const ticketStatus = document.getElementById('ticketStatus');
+    const tryAgain = document.getElementById('tryAgain');
+    const ticketInfo = document.getElementById('ticketInfo');
+    const ticketEvent = document.getElementById('ticketEvent');
+    const ticketId = document.getElementById('ticketId');
+    const ticketType = document.getElementById('ticketType');
+    const ticketStatusInfo = document.getElementById('ticketStatusInfo');
+    const redeemButton = document.getElementById('redeemButton');
+    
+    // Elementos do modal
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const switchToRegister = document.getElementById('switchToRegister');
+    const switchToLogin = document.getElementById('switchToLogin');
+    const loginButton = document.getElementById('loginButton');
+    const registerButton = document.getElementById('registerButton');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const registerEmail = document.getElementById('registerEmail');
+    const registerPassword = document.getElementById('registerPassword');
+    const registerConfirmPassword = document.getElementById('registerConfirmPassword');
+    const modalTitle = document.getElementById('modalTitle');
+
+    // Variáveis globais
+    let currentUser = null;
+    let events = [];
+    let currentTicket = null;
+
+    // Função para mostrar mensagem de erro
+    function showError(message) {
+      ticketStatus.querySelector('.status-title').textContent = 'Erro';
+      ticketStatus.querySelector('.status-message').textContent = message;
+      ticketStatus.querySelector('.status-icon').innerHTML = '<i class="ri-error-warning-line"></i>';
+      ticketStatus.style.display = 'block';
+      ticketInfo.style.display = 'none';
+    }
+
+    // Função para mostrar mensagem de sucesso
+    function showSuccess(message) {
+      ticketStatus.querySelector('.status-title').textContent = 'Sucesso!';
+      ticketStatus.querySelector('.status-message').textContent = message;
+      ticketStatus.querySelector('.status-icon').innerHTML = '<i class="ri-checkbox-circle-line"></i>';
+      ticketStatus.style.display = 'block';
+      ticketInfo.style.display = 'none';
+    }
+
+    // Carregar eventos do Firestore
+    function loadEvents() {
+      db.collection("eventos").get()
+        .then((querySnapshot) => {
+          events = [];
+          eventSelect.innerHTML = '<option value="" selected disabled>Selecione o evento</option>';
+          
+          querySnapshot.forEach((doc) => {
+            events.push({
+              id: doc.id,
+              ...doc.data()
+            });
+            eventSelect.innerHTML += `<option value="${doc.id}">${doc.data().nome}</option>`;
+          });
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar eventos: ", error);
+          eventSelect.innerHTML = '<option value="" selected disabled>Erro ao carregar eventos</option>';
+        });
+    }
+
+    // Verificar autenticação
+function checkAuth() {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      currentUser = user;
+      loadEvents();
+      loadUserTickets(); // Carrega os ingressos do usuário
+    } else {
+      showLoginModal();
+    }
+  });
+}
+function loadUserTickets() {
+  db.collection("users").doc(currentUser.uid).collection("tickets").get()
+    .then((querySnapshot) => {
+      const tickets = [];
+      querySnapshot.forEach((doc) => {
+        tickets.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      displayUserTickets(tickets);
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar ingressos do usuário:", error);
+    });
+}
+
+    // Mostrar modal de login
+    function showLoginModal() {
+      loginModal.style.display = 'flex';
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+      modalTitle.textContent = 'Entrar';
+    }
+
+    // Fechar modal
+    function closeModal() {
+      loginModal.style.display = 'none';
+    }
+
+    // Alternar entre login e registro
+    switchToRegister.addEventListener('click', () => {
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+      modalTitle.textContent = 'Criar Conta';
+    });
+
+    switchToLogin.addEventListener('click', () => {
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+      modalTitle.textContent = 'Entrar';
+    });
+
+    // Login
+    loginButton.addEventListener('click', () => {
+      const email = loginEmail.value;
+      const password = loginPassword.value;
+      
+      if (!email || !password) {
+        alert('Por favor, preencha todos os campos');
+        return;
+      }
+      
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          closeModal();
+          loadEvents();
+        })
+        .catch((error) => {
+          alert('Erro ao fazer login: ' + error.message);
+        });
+    });
+
+    // Registrar
+    registerButton.addEventListener('click', () => {
+  const name = registerName.value.trim();
+  const email = registerEmail.value.trim();
+  const password = registerPassword.value;
+  const confirmPassword = registerConfirmPassword.value;
+  
+  if (!name || !email || !password || !confirmPassword) {
+    alert('Por favor, preencha todos os campos');
+    return;
+  }
+  
+  if (password !== confirmPassword) {
+    alert('As senhas não coincidem');
+    return;
+  }
+  
+  if (password.length < 6) {
+    alert('A senha deve ter pelo menos 6 caracteres');
+    return;
+  }
+  
+  // Criar usuário no Authentication
+  auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Armazenar informações adicionais no Firestore
+      return db.collection('users').doc(userCredential.user.uid).set({
+        name: name,
+        email: email,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        completedEvents: 0,
+        purchasedTickets: 0,
+        events: [],
+        tickets: []
+      });
+    })
+    .then(() => {
+      closeModal();
+      loadEvents();
+    })
+    .catch((error) => {
+      alert('Erro ao criar conta: ' + error.message);
+    });
+});
+
+    // Habilitar campo de código quando evento for selecionado
+    eventSelect.addEventListener('change', function() {
+      if (this.value) {
+        ticketCode.disabled = false;
+        ticketCode.placeholder = "Digite o código do ingresso...";
+        ticketCode.focus();
+      } else {
+        ticketCode.disabled = true;
+        ticketCode.placeholder = "Selecione um evento primeiro";
+      }
+    });
+
+    // Buscar ingresso
+    searchButton.addEventListener('click', searchTicket);
+
+    // Tentar novamente
+    tryAgain.addEventListener('click', (e) => {
+      e.preventDefault();
+      ticketCode.value = '';
+      ticketCode.focus();
+    });
+
+    // Permitir busca com Enter
+    ticketCode.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        searchTicket();
+      }
+    });
+
+function searchTicket() {
+  const eventId = eventSelect.value;
+  const code = ticketCode.value.trim();
+  
+  if (!eventId) {
+    alert('Por favor, selecione um evento');
+    return;
+  }
+  
+  if (!code) {
+    alert('Por favor, digite o código do ingresso');
+    return;
+  }
+  
+  // Verifica primeiro na coleção do usuário
+  db.collection("users").doc(currentUser.uid).collection("tickets").doc(code).get()
+    .then((userTicketDoc) => {
+      if (userTicketDoc.exists) {
+        // Se encontrou no perfil do usuário, busca os detalhes completos
+        return db.collection("eventos").doc(eventId).collection("Ingressos").doc(code).get()
+          .then((eventTicketDoc) => {
+            if (eventTicketDoc.exists) {
+              currentTicket = {
+                id: eventTicketDoc.id,
+                ...eventTicketDoc.data(),
+                eventId: eventId,
+                resgatado: true, // Garante que aparece como resgatado
+                uidResgatado: currentUser.uid
+              };
+              displayTicketInfo();
+            } else {
+              showError('Ingresso não encontrado no evento.');
+            }
+          });
+      } else {
+        // Se não encontrou no perfil do usuário, busca normalmente
+        return db.collection("eventos").doc(eventId).collection("Ingressos").doc(code).get()
+          .then((doc) => {
+            if (doc.exists) {
+              currentTicket = {
+                id: doc.id,
+                ...doc.data(),
+                eventId: eventId
+              };
+              displayTicketInfo();
+            } else {
+              showError('Ingresso não encontrado. Verifique o código digitado.');
+            }
+          });
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar ingresso: ", error);
+      showError('Ocorreu um erro ao buscar o ingresso. Tente novamente.');
+    });
+}
+
+// Mostrar informações do ingresso
+function displayTicketInfo() {
+  if (!currentTicket) return;
+  
+  // Encontra o evento correspondente
+  const event = events.find(e => e.id === currentTicket.eventId);
+  
+  ticketEvent.textContent = event ? event.nome : 'Evento não encontrado';
+  ticketId.textContent = currentTicket.id;
+  ticketType.textContent = currentTicket.tipo || 'Não especificado';
+  
+  if (currentTicket.resgatado) {
+    ticketStatusInfo.textContent = currentTicket.uidResgatado === currentUser.uid 
+      ? 'Resgatado por você' 
+      : 'Resgatado por outro usuário';
+    redeemButton.disabled = true;
+    redeemButton.textContent = 'Já resgatado';
+  } else {
+    ticketStatusInfo.textContent = 'Disponível para resgate';
+    redeemButton.disabled = false;
+    redeemButton.textContent = 'Resgatar Ingresso';
+  }
+  
+  ticketStatus.style.display = 'none';
+  ticketInfo.style.display = 'block';
+  
+  // Rola a página para mostrar as informações do ingresso
+  ticketInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  
+  // Atualiza a lista de ingressos do usuário
+  loadUserTickets();
+}
+
+    // Mostrar informações do ingresso
+    function displayUserTickets(tickets) {
+  const ticketsList = document.getElementById('ticketsList');
+  const userTicketsSection = document.getElementById('userTickets');
+  
+  if (tickets.length === 0) {
+    userTicketsSection.style.display = 'none';
+    return;
+  }
+  
+  ticketsList.innerHTML = '';
+  tickets.forEach(ticket => {
+    const event = events.find(e => e.id === ticket.eventId);
+    const ticketElement = document.createElement('div');
+    ticketElement.className = 'ticket-item';
+    ticketElement.innerHTML = `
+      <p><strong>Evento:</strong> ${event ? event.nome : 'Evento não encontrado'}</p>
+      <p><strong>Código:</strong> ${ticket.ticketId}</p>
+      <p><strong>Tipo:</strong> ${ticket.tipo || 'Não especificado'}</p>
+      <p><strong>Resgatado em: </strong> ${new Date(ticket.dataResgate?.toDate()).toLocaleString()}</p>
+      <hr>
+    `;
+    ticketsList.appendChild(ticketElement);
+  });
+  
+  userTicketsSection.style.display = 'block';
+}
+
+redeemButton.addEventListener('click', () => {
+  if (!currentTicket) return;
+  
+  if (currentTicket.resgatado) {
+    alert('Este ingresso já foi resgatado');
+    return;
+  }
+  
+  const batch = db.batch();
+  
+  // Atualiza o ingresso no evento
+  const ticketRef = db.collection("eventos").doc(currentTicket.eventId).collection("Ingressos").doc(currentTicket.id);
+  batch.update(ticketRef, {
+    resgatado: true,
+    uidResgatado: currentUser.uid,
+    dataResgate: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  
+  // Adiciona ao perfil do usuário
+  const userTicketRef = db.collection("users").doc(currentUser.uid).collection("tickets").doc(currentTicket.id);
+  
+  // Cria o objeto do ticket com verificação para campos undefined
+  const userTicketData = {
+    eventId: currentTicket.eventId,
+    ticketId: currentTicket.id,
+    dataResgate: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  
+  // Adiciona tipo apenas se existir e não for undefined
+  if (currentTicket.tipo) {
+    userTicketData.tipo = currentTicket.tipo;
+  } else {
+    userTicketData.tipo = "Não especificado"; // Valor padrão
+  }
+  
+  batch.set(userTicketRef, userTicketData);
+  
+  // Atualiza contador no perfil do usuário
+  const userRef = db.collection("users").doc(currentUser.uid);
+  batch.update(userRef, {
+    purchasedTickets: firebase.firestore.FieldValue.increment(1)
+  });
+  
+  batch.commit()
+    .then(() => {
+      showSuccess('Ingresso resgatado com sucesso!');
+      currentTicket.resgatado = true;
+      currentTicket.uidResgatado = currentUser.uid;
+      displayTicketInfo();
+    })
+    .catch((error) => {
+      console.error("Erro ao resgatar ingresso: ", error);
+      showError('Ocorreu um erro ao resgatar o ingresso. Tente novamente.');
+    });
+});
+
+    // Inicializar aplicação
+    checkAuth();
+  </script>
+</body>
+</html>

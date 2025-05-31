@@ -477,7 +477,7 @@ async function venderIngresso() {
         resgatado: false,
         metodoPagamento: 'pix',
         dataCriacao: firebase.firestore.FieldValue.serverTimestamp(),
-        userId: state.usuario.uid
+        createUserId: state.usuario.uid
       });
 
     // Atualizar contador de vendidos no lote
@@ -768,4 +768,15 @@ function mostrarNotificacao(mensagem, tipo = 'info') {
 // Fechar modal
 function fecharModal() {
   document.getElementById('renomear-lista-modal').style.display = 'none';
+}
+
+// Função para logout
+function logoutUser() {
+  auth.signOut()
+    .then(() => {
+      showNotification('Logout realizado com sucesso.', 'success');
+    })
+    .catch((error) => {
+      showNotification('Erro ao fazer logout: ' + error.message, 'error');
+    });
 }

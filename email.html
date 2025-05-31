@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HP TICKETS | Redeem tickets</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    /* Ticket Styles */
+    .ticket {
+      width: 100%;
+      max-width: 350px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    
+    .ticket-header {
+      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .ticket-header::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background: radial-gradient(circle at 10px 0, transparent 10px, white 11px);
+      background-size: 20px 20px;
+    }
+    
+    .ticket-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .ticket-venue {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .ticket-body {
+      padding: 20px;
+    }
+    
+    .ticket-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    
+    .info-label {
+      font-size: 0.8rem;
+      color: #666;
+      display: block;
+      margin-bottom: 3px;
+    }
+    
+    .info-value {
+      font-weight: 500;
+      font-size: 1rem;
+    }
+    
+    .ticket-code {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 20px 0;
+      font-family: monospace;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .ticket-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 15px;
+      border-top: 1px dashed #ddd;
+    }
+    
+    .ticket-qr {
+      width: 80px;
+      height: 80px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+    
+    .ticket-qr img {
+      width: 50%;
+      object-fit: cover;
+    }
+    
+    .ticket-valid {
+      text-align: right;
+    }
+    
+    .valid-until {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    
+    .valid-date {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    /* Perforation effect */
+    .ticket::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 20px;
+      width: 1px;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 10px,
+        #f5f5f5 10px,
+        #f5f5f5 20px
+      );
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket">
+    <div class="ticket-header">
+      <div class="ticket-title">VEGAS EXPERIENCE</div>
+      <div class="ticket-venue">HP IN VEGAS 2025</div>
+    </div>
+    
+    <div class="ticket-body">
+      <div class="ticket-info">
+        <div>
+          <span class="info-label">Nome</span>
+          <span class="info-value">Digite o nome</span>
+        </div>
+        <div>
+          <span class="info-label">Data</span>
+          <span class="info-value">Digite a data</span>
+        </div>
+      </div>
+      
+      <div class="ticket-info">
+        <div>
+          <span class="info-label">Horário</span>
+          <span class="info-value">Digite o horário</span>
+        </div>
+        <div>
+          <span class="info-label">Localização</span>
+          <span class="info-value">Digite o local</span>
+        </div>
+      </div>
+      
+      <div class="ticket-code">HP-XXXXXXX</div>
+      
+      <div class="ticket-footer">
+        <div class="ticket-qr">
+          
+        </div>
+        <div class="ticket-valid">
+          <div class="valid-until">Válido até</div>
+          <div class="valid-date">Digite a validade</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
