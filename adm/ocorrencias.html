@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ocorrências</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+:root {
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --secondary: #3f37c9;
+  --accent: #4895ef;
+  --danger: #f72585;
+  --success: #4cc9f0;
+  --warning: #f8961e;
+  --info: #560bad;
+  
+  --text-primary: #2b2d42;
+  --text-secondary: #8d99ae;
+  --text-light: #edf2f4;
+  
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-dark: #1f2937;
+  
+  --border-color: #e9ecef;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset moderno */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Layout principal */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+header {
+  background-color: var(--bg-primary);
+  padding: 1.5rem 0;
+  box-shadow: var(--box-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--primary);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.2);
+}
+
+/* Cards */
+.card {
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.card-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  border-radius: 3px;
+}
+
+/* Formulários */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* Tags */
+.tag-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.tag {
+  padding: 10px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00000015;
+  transition: var(--transition);
+}
+
+.tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tag.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(190, 190, 190, 0.842),
+            0 0 10px #00000015;
+}
+
+.tag-problema {
+    background-color: #ff6d00; /* Laranja forte */
+    color: white;
+}
+
+.tag-urgencia {
+    background-color: #d50000; /* Vermelho */
+    color: white;
+}
+
+.tag-estoques {
+    background-color: #2962ff; /* Azul */
+    color: white;
+}
+
+.tag-sistema {
+    background-color: #37474f; /* Cinza escuro */
+    color: white;
+}
+
+.tag-entrada {
+    background-color: #00c853; /* Verde */
+    color: white;
+}
+
+.tag-banheiros {
+    background-color: #0091ea; /* Azul claro */
+    color: white;
+}
+
+.tag-punicao {
+    background-color: #6a1b9a; /* Roxo */
+    color: white;
+}
+
+.tag-seguranca {
+    background-color: #212121; /* Preto */
+    color: white;
+}
+
+.tag-outros {
+  background-color: var(--success);
+  color: white;
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+.btn-success {
+  background-color: var(--success);
+  color: white;
+}
+
+.btn-warning {
+  background-color: var(--warning);
+  color: var(--text-primary);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+/* Lista de ocorrências */
+.occurrences-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.occurrence {
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius);
+  padding: 1.75rem;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.occurrence:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.occurrence::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary);
+}
+
+.occurrence-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.occurrence-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.occurrence-date {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.occurrence-content {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+.occurrence-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.occurrence-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.occurrence-status {
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background-color: rgba(248, 150, 30, 0.1);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+}
+
+.status-in-progress {
+  background-color: rgba(67, 97, 238, 0.1);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.status-resolved {
+  background-color: rgba(76, 201, 240, 0.1);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.occurrence-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.author-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Filtros */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-select {
+  flex: 1;
+  max-width: 250px;
+}
+
+/* Notificações */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  background-color: var(--bg-primary);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 1000;
+  transform: translateX(120%);
+  transition: transform 0.3s ease;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification i {
+  font-size: 1.25rem;
+}
+
+.notification.success {
+  border-left: 4px solid var(--success);
+  color: var(--success);
+}
+
+.notification.error {
+  border-left: 4px solid var(--danger);
+  color: var(--danger);
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1.5rem;
+  }
+  
+  .occurrences-list {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .occurrence-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .occurrence-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .occurrences-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .tag {
+    padding: 0.625rem 1rem;
+    font-size: 0.8125rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.admin-actions .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+
+/* Estilos para os botões específicos */
+.btn-success { background-color: #28a745; color: white; }
+.btn-warning { background-color: #ffc107; color: black; }
+.btn-info { background-color: #17a2b8; color: white; }
+.btn-secondary { background-color: #6c757d; color: white; }
+</style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><i class="fas fa-exclamation-triangle"></i> Sistema de Ocorrências</h1>
+            <div class="user-info" id="user-info">
+                <div class="user-avatar" id="user-avatar">AD</div>
+                <span id="user-name">Administrador</span>
+                <button class="btn btn-sm logout-btn" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="app-content">
+            <div class="card">
+                <h2 class="card-title">Relatar Nova Ocorrência</h2>
+                <form id="occurrence-form">
+                    <div class="form-group">
+                        <label for="title">Título</label>
+                        <input type="text" id="title" placeholder="Ex: Fila grande na entrada" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <textarea id="description" placeholder="Descreva o problema com detalhes..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tags (Selecione até 3)</label>
+                        <div class="tag-selector">
+                             <!-- Novas tags -->
+                            <div class="tag tag-problema" data-tag="problema">
+                                <i class="fas fa-exclamation-triangle"></i> Problema
+                            </div>
+                            <div class="tag tag-urgencia" data-tag="urgencia">
+                                <i class="fas fa-bolt"></i> Urgência
+                            </div>
+                            <div class="tag tag-estoques" data-tag="estoques">
+                                <i class="fas fa-boxes"></i> Estoques
+                            </div>
+                            <div class="tag tag-sistema" data-tag="sistema">
+                                <i class="fas fa-server"></i> Sistema
+                            </div>
+                            <div class="tag tag-entrada" data-tag="entrada">
+                                <i class="fas fa-door-open"></i> Entrada
+                            </div>
+                            <div class="tag tag-banheiros" data-tag="banheiros">
+                                <i class="fas fa-toilet"></i> Banheiros
+                            </div>
+                            <div class="tag tag-punicao" data-tag="punicao">
+                                <i class="fas fa-gavel"></i> Punição
+                            </div>
+                            <div class="tag tag-seguranca" data-tag="seguranca">
+                                <i class="fas fa-shield-alt"></i> Segurança
+                            </div>
+                            <div class="tag tag-outros" data-tag="outros">
+                                <i class="fas fa-ellipsis-h"></i> Outros
+                            </div>
+                        </div>
+                        <input type="hidden" id="tags">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Enviar Ocorrência
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="filter-group">
+                    <h2 class="card-title">Ocorrências Recentes</h2>
+                    <div class="form-group filter-select">
+                        <select id="filter-status" class="btn-sm">
+                            <option value="all">Todas</option>
+                            <option value="pending">Pendentes</option>
+                            <option value="in-progress">Em Andamento</option>
+                            <option value="resolved">Resolvidas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="occurrences-list" id="occurrences-list">
+                    <!-- Exemplo de ocorrência -->
+                    <div class="occurrence">
+                        <div class="occurrence-header">
+                            <div class="occurrence-title">Fila grande na entrada</div>
+                            <div class="occurrence-date">10/11/2023 14:30</div>
+                        </div>
+                        <div class="occurrence-content">
+                            A fila na entrada principal está muito grande e causando tumulto. Sugiro abrir mais um guichê.
+                        </div>
+                        <div class="occurrence-footer">
+                            <div class="occurrence-tags">
+                                <div class="tag tag-urgente">Urgente</div>
+                                <div class="tag tag-estrutura">Estrutura</div>
+                            </div>
+                            <div class="occurrence-status status-pending">Pendente</div>
+                        </div>
+                        <div class="occurrence-author">
+                            <div class="author-avatar">JS</div>
+                            <span>João Silva</span>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="btn btn-warning btn-sm progress-btn">
+                                <i class="fas fa-user"></i> Atribuir
+                            </button>
+                            <button class="btn btn-success btn-sm resolve-btn">
+                                <i class="fas fa-check"></i> Resolver
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Outro exemplo -->
+                    <div class="occurrence">
+                        <div class="occurrence-header">
+                            <div class="occurrence-title">Problema no sistema de som</div>
+                            <div class="occurrence-date">09/11/2023 10:15</div>
+                        </div>
+                        <div class="occurrence-content">
+                            O microfone do palco principal está com chiado constante, atrapalhando as apresentações.
+                        </div>
+                        <div class="occurrence-footer">
+                            <div class="occurrence-tags">
+                                <div class="tag tag-som">Som</div>
+                            </div>
+                            <div class="occurrence-status status-in-progress">Em Andamento</div>
+                        </div>
+                        <div class="occurrence-author">
+                            <div class="author-avatar">MA</div>
+                            <span>Maria Andrade</span>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="btn btn-success btn-sm resolve-btn">
+                                <i class="fas fa-check"></i> Resolver
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Outro exemplo resolvido -->
+                    <div class="occurrence">
+                        <div class="occurrence-header">
+                            <div class="occurrence-title">Cadeira quebrada no auditório</div>
+                            <div class="occurrence-date">08/11/2023 16:45</div>
+                        </div>
+                        <div class="occurrence-content">
+                            Cadeira na fileira 5, assento 12 está com o encosto quebrado e pode machucar alguém.
+                        </div>
+                        <div class="occurrence-footer">
+                            <div class="occurrence-tags">
+                                <div class="tag tag-estrutura">Estrutura</div>
+                            </div>
+                            <div class="occurrence-status status-resolved">Resolvido</div>
+                        </div>
+                        <div class="occurrence-author">
+                            <div class="author-avatar">CP</div>
+                            <span>Carlos Pereira</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificação -->
+    <div id="notification" class="notification hidden">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message">Operação realizada com sucesso!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <script src="ocorrencias.js"></script>
+</body>
+</html>
