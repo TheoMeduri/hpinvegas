@@ -6,495 +6,7 @@
     <title>Chat Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-  --primary: #4361ee;
-  --primary-dark: #3a56d4;
-  --secondary: #3f37c9;
-  --accent: #4895ef;
-  --danger: #f72585;
-  --success: #4cc9f0;
-  --warning: #f8961e;
-  --info: #560bad;
-  
-  --text-primary: #2b2d42;
-  --text-secondary: #8d99ae;
-  --text-light: #edf2f4;
-  
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-dark: #1f2937;
-  
-  --border-color: #e9ecef;
-  --border-radius: 12px;
-  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.header {
-  background: var(--primary);
-  color: var(--text-light);
-  padding: 1rem 1.5rem;
-  box-shadow: var(--box-shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.logo {
-  font-size: 1.25rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo-icon {
-  color: var(--accent);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary-dark);
-  color: var(--text-light);
-  box-shadow: var(--box-shadow);
-}
-
-.user-details {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  color: var(--text-light);
-}
-
-.user-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-name {
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.user-email {
-  font-size: 0.7rem;
-  opacity: 0.8;
-}
-
-.user-status {
-  display: flex;
-  align-items: center;
-  font-size: 0.7rem;
-  gap: 0.5rem;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--success);
-  border-radius: 50%;
-  animation: pulse 1.5s infinite;
-}
-
-.logout-btn {
-  background: rgba(255,255,255,0.1);
-  border: none;
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  color: var(--text-light);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logout-btn:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-.chat-container {
-  flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background-color: var(--bg-primary);
-}
-
-.message-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.message-date {
-  align-self: center;
-  background-color: var(--bg-secondary);
-  padding: 0.25rem 1rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin: 0.5rem 0;
-  box-shadow: var(--box-shadow);
-}
-
-.message {
-  max-width: 80%;
-  padding: 0.75rem 1rem;
-  border-radius: var(--border-radius);
-  position: relative;
-  word-wrap: break-word;
-  box-shadow: var(--box-shadow);
-  font-size: 0.9rem;
-  line-height: 1.4;
-  transition: var(--transition);
-}
-
-.message:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.self-message {
-  align-self: flex-end;
-  background-color: var(--primary);
-  color: var(--text-light);
-  border-bottom-right-radius: 4px;
-}
-
-.other-message {
-  align-self: flex-start;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-bottom-left-radius: 4px;
-}
-
-.message-sender {
-  font-weight: 600;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-  color: var(--secondary);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.message-text {
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-}
-
-.message-time {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  font-size: 0.65rem;
-  color: var(--text-secondary);
-  margin-top: 0.5rem;
-  margin-left: 0.5rem;
-  float: right;
-  clear: both;
-  gap: 0.25rem;
-}
-
-.message-status {
-  color: var(--success);
-}
-
-.input-container {
-  padding: 1rem;
-  background-color: var(--bg-primary);
-  border-top: 1px solid var(--border-color);
-  position: sticky;
-  bottom: 0;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-}
-
-.message-form {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-#message-input {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: 0.9rem;
-  outline: none;
-  transition: var(--transition);
-  background-color: var(--bg-primary);
-  box-shadow: var(--box-shadow);
-  min-height: 48px;
-  max-height: 120px;
-  resize: none;
-  overflow-y: auto;
-}
-
-#message-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-}
-
-.send-button {
-  background-color: var(--primary);
-  color: var(--text-light);
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--box-shadow);
-}
-
-.send-button:hover {
-  background-color: var(--primary-dark);
-  transform: scale(1.05);
-}
-
-.send-button:active {
-  transform: scale(0.95);
-}
-
-.send-button:disabled {
-  background-color: var(--border-color);
-  cursor: not-allowed;
-  transform: none;
-}
-
-.error-message {
-  color: var(--danger);
-  padding: 0.75rem 1rem;
-  text-align: center;
-  background-color: rgba(247, 37, 133, 0.1);
-  border-radius: var(--border-radius);
-  margin: 0.75rem;
-  font-size: 0.85rem;
-  box-shadow: var(--box-shadow);
-}
-
-.loading {
-  text-align: center;
-  padding: 1.5rem;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(0,0,0,0.1);
-  border-radius: 50%;
-  border-top-color: var(--primary);
-  animation: spin 1s linear infinite;
-}
-
-/* Animações */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-  0% { opacity: 0.6; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 0.6; transform: scale(0.9); }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.new-message {
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* Efeito de digitação */
-.typing-indicator {
-  display: flex;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg-primary);
-  border-radius: var(--border-radius);
-  align-self: flex-start;
-  margin-bottom: 0.5rem;
-  box-shadow: var(--box-shadow);
-  width: fit-content;
-  border: 1px solid var(--border-color);
-}
-
-.typing-content {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.typing-text {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
-.typing-dots {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.typing-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--text-secondary);
-  border-radius: 50%;
-  animation: typingAnimation 1.4s infinite ease-in-out;
-}
-
-.typing-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typingAnimation {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-4px); }
-}
-
-/* Scrollbar personalizada */
-.chat-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-container::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.05);
-  border-radius: 4px;
-}
-
-.chat-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.2);
-  border-radius: 4px;
-}
-
-.chat-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0,0,0,0.3);
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .header {
-    padding: 0.75rem 1rem;
-  }
-  
-  .user-info {
-    padding: 0.5rem 1rem;
-  }
-  
-  .chat-container {
-    padding: 0.75rem;
-  }
-  
-  .message {
-    max-width: 85%;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-  }
-  
-  #message-input {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
-  }
-  
-  .input-container {
-    padding: 0.75rem;
-  }
-  
-  .send-button {
-    width: 42px;
-    height: 42px;
-  }
-}
-
-@media (max-width: 480px) {
-  .message {
-    max-width: 90%;
-  }
-  
-  .user-name {
-    font-size: 0.85rem;
-  }
-  
-  .user-email {
-    font-size: 0.65rem;
-  }
-  
-  .logout-btn span {
-    display: none;
-  }
-  
-  .logout-btn {
-    padding: 0.5rem;
-    width: 36px;
-    height: 36px;
-    justify-content: center;
-  }
-}
-    </style>
+    <link rel="stylesheet" href="chat.css">
 </head>
 <body>
     <div class="header">
@@ -532,6 +44,18 @@ body {
     
     <div class="input-container">
         <form class="message-form" id="message-form">
+            <div id="reply-preview" class="reply-container" style="display: none;">
+                <div class="reply-header">
+                    <div class="reply-label">Respondendo a</div>
+                    <button type="button" class="reply-cancel" id="cancel-reply">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="reply-content">
+                    <div class="reply-sender" id="reply-sender-name"></div>
+                    <div class="reply-text" id="reply-preview-text"></div>
+                </div>
+            </div>
             <textarea id="message-input" placeholder="Digite sua mensagem..." autocomplete="off" required rows="1"></textarea>
             <button type="submit" class="send-button">
                 <i class="fas fa-paper-plane"></i>
@@ -547,420 +71,680 @@ body {
     
     <script>
         // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyCLfdhCxEatG1o1YhjwB9bcA8ku2s2_siA",
-            authDomain: "hpinvegas-2f531.firebaseapp.com",
-            projectId: "hpinvegas-2f531",
-            storageBucket: "hpinvegas-2f531.appspot.com",
-            messagingSenderId: "67519536188",
-            appId: "1:67519536188:web:ccf4c12a861b2efd463739"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyCLfdhCxEatG1o1YhjwB9bcA8ku2s2_siA",
+    authDomain: "hpinvegas-2f531.firebaseapp.com",
+    projectId: "hpinvegas-2f531",
+    storageBucket: "hpinvegas-2f531.appspot.com",
+    messagingSenderId: "67519536188",
+    appId: "1:67519536188:web:ccf4c12a861b2efd463739"
+};
 
-        // Inicializa o Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const auth = firebase.auth();
-        const firestore = firebase.firestore();
-        
-        // Elementos DOM
-        const chatContainer = document.getElementById('chat-container');
-        const messageForm = document.getElementById('message-form');
-        const messageInput = document.getElementById('message-input');
-        const userInfoDiv = document.getElementById('user-info');
-        const userNameSpan = document.getElementById('user-name');
-        const userAvatar = document.getElementById('user-avatar');
-        const logoutBtn = document.getElementById('logout-btn');
-        
-        // Variáveis globais
-        let currentUser = null;
-        let userName = 'Usuário';
-        let messages = [];
-        let isTyping = false;
-        
-        // Inicializa o chat
-        async function initChat() {
-            try {
-                // Verifica o estado de autenticação
-                await checkAuthState();
-                
-                // Configura listeners
-                setupListeners();
-                
-            } catch (error) {
-                console.error('Erro na inicialização do chat:', error);
-                showError('Erro ao conectar ao chat. Recarregue a página.');
+// Inicializa o Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
+// Elementos DOM
+const chatContainer = document.getElementById('chat-container');
+const messageForm = document.getElementById('message-form');
+const messageInput = document.getElementById('message-input');
+const userInfoDiv = document.getElementById('user-info');
+const userNameSpan = document.getElementById('user-name');
+const userAvatar = document.getElementById('user-avatar');
+const logoutBtn = document.getElementById('logout-btn');
+const replyPreview = document.getElementById('reply-preview');
+const replySenderName = document.getElementById('reply-sender-name');
+const replyPreviewText = document.getElementById('reply-preview-text');
+const cancelReplyBtn = document.getElementById('cancel-reply');
+
+// Variáveis globais
+let currentUser = null;
+let userName = 'Usuário';
+let messages = [];
+let isTyping = false;
+let typingTimeout;
+let replyingTo = null; // Armazena a mensagem que está sendo respondida
+const TYPING_TIMEOUT_LENGTH = 2000;
+
+// Função para verificar se está no final do chat
+function isScrolledToBottom() {
+    return chatContainer.scrollHeight - chatContainer.clientHeight <= chatContainer.scrollTop + 1;
+}
+
+// Rolagem suave para o final do chat
+function scrollToBottom() {
+    chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
+// Inicializa o chat
+async function initChat() {
+    try {
+        await checkAuthState();
+        setupListeners();
+    } catch (error) {
+        console.error('Erro na inicialização do chat:', error);
+        showError('Erro ao conectar ao chat. Recarregue a página.');
+    }
+}
+
+// Verifica o estado de autenticação
+async function checkAuthState() {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadUserInfo();
+                updateUserInfoDisplay();
+                loadMessages();
+                setupTypingListener();
+                resolve();
+            } else {
+                unsubscribe();
+                redirectToLogin();
+                reject(new Error('Usuário não autenticado'));
             }
+        }, (error) => {
+            unsubscribe();
+            reject(error);
+        });
+    });
+}
+
+// Configura o listener para status de digitação
+function setupTypingListener() {
+    database.ref('typing').on('value', (snapshot) => {
+        const existingTypingIndicator = document.querySelector('.typing-indicator');
+        if (existingTypingIndicator) {
+            existingTypingIndicator.remove();
         }
         
-        // Verifica o estado de autenticação
-        async function checkAuthState() {
-            return new Promise((resolve, reject) => {
-                const unsubscribe = auth.onAuthStateChanged(async (user) => {
-                    if (user) {
-                        currentUser = user;
-                        console.log('Usuário logado:', user.email);
-                        
-                        // Carrega informações do usuário
-                        await loadUserInfo();
-                        updateUserInfoDisplay();
-                        loadMessages();
-                        resolve();
-                    } else {
-                        unsubscribe();
-                        redirectToLogin();
-                        reject(new Error('Usuário não autenticado'));
-                    }
-                }, (error) => {
-                    unsubscribe();
-                    reject(error);
-                });
-            });
-        }
+        const typingData = snapshot.val();
+        if (!typingData) return;
         
-        // Redireciona para a página de login
-        function redirectToLogin() {
-            showError('Usuário não autenticado. Redirecionando para login...');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
-        }
+        const typingUsers = Object.values(typingData)
+            .filter(user => user.userId !== currentUser.uid && user.isTyping);
         
-        // Configura listeners
-        function setupListeners() {
-            // Listener para input de mensagem
-            messageInput.addEventListener('input', adjustTextareaHeight);
+        if (typingUsers.length > 0) {
+            const namePromises = typingUsers.map(user => 
+                firestore.collection('users').doc(user.userId).get()
+                    .then(doc => doc.exists ? doc.data().name : 'Alguém')
+            );
             
-            // Listener para digitação
-            messageInput.addEventListener('keydown', handleTyping);
-            messageInput.addEventListener('blur', resetTyping);
-        }
-        
-        // Ajusta a altura do textarea dinamicamente
-        function adjustTextareaHeight() {
-            messageInput.style.height = 'auto';
-            messageInput.style.height = (messageInput.scrollHeight) + 'px';
-        }
-        
-        // Carrega informações do usuário do Firestore
-        async function loadUserInfo() {
-            try {
-                const userDoc = await firestore.collection('users').doc(currentUser.uid).get();
+            Promise.all(namePromises).then(names => {
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
                 
-                if (userDoc.exists) {
-                    userName = userDoc.data().name || currentUser.displayName || currentUser.email.split('@')[0];
+                let message = '';
+                if (names.length === 1) {
+                    message = `${names[0]} está digitando`;
+                } else if (names.length === 2) {
+                    message = `${names[0]} e ${names[1]} estão digitando`;
                 } else {
-                    // Cria um novo registro de usuário se não existir
-                    userName = currentUser.displayName || currentUser.email.split('@')[0];
-                    await firestore.collection('users').doc(currentUser.uid).set({
-                        name: userName,
-                        email: currentUser.email,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastActive: firebase.firestore.FieldValue.serverTimestamp(),
-                        avatarColor: getRandomColor()
-                    });
+                    message = `Muitas pessoas digitando`;
                 }
                 
-                // Atualiza o avatar
-                updateUserAvatar();
+                typingIndicator.innerHTML = `
+                    <div class="typing-content">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <div class="typing-text">${message}</div>
+                    </div>
+                `;
                 
-            } catch (error) {
-                console.error('Erro ao carregar informações do usuário:', error);
-                userName = currentUser.email.split('@')[0];
-            }
-        }
-        
-        // Gera uma cor aleatória para o avatar
-        function getRandomColor() {
-            const colors = ['#1e88e5', '#e53935', '#8e24aa', '#43a047', '#fb8c00', '#00acc1'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-        
-        // Atualiza o avatar do usuário
-        function updateUserAvatar() {
-            const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
-            userAvatar.textContent = initials.substring(0, 2);
-            
-            // Se tiver cor no perfil, usa ela, senão gera uma aleatória
-            firestore.collection('users').doc(currentUser.uid).get()
-                .then(doc => {
-                    const color = doc.exists && doc.data().avatarColor ? doc.data().avatarColor : getRandomColor();
-                    userAvatar.style.backgroundColor = color;
-                    userAvatar.style.color = getContrastColor(color);
-                });
-        }
-        
-        // Retorna cor contrastante para texto
-        function getContrastColor(hexColor) {
-            const r = parseInt(hexColor.substr(1, 2), 16);
-            const g = parseInt(hexColor.substr(3, 2), 16);
-            const b = parseInt(hexColor.substr(5, 2), 16);
-            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-            return brightness > 128 ? '#000000' : '#FFFFFF';
-        }
-        
-        // Atualiza a exibição das informações do usuário
-        function updateUserInfoDisplay() {
-            userNameSpan.textContent = userName;
-            
-            // Configura o botão de logout
-            logoutBtn.addEventListener('click', logout);
-        }
-        
-        // Função de logout
-        function logout() {
-            auth.signOut()
-                .then(() => {
-                    window.location.href = 'login.html';
-                })
-                .catch((error) => {
-                    console.error('Erro ao fazer logout:', error);
-                    showError('Erro ao sair. Tente novamente.');
-                });
-        }
-        // Carrega as mensagens do Realtime Database
-    function loadMessages() {
-        chatContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div>Carregando mensagens...</div></div>';
-        
-        database.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
-            messages = [];
-            snapshot.forEach((childSnapshot) => {
-                const message = childSnapshot.val();
-                // Garante que o timestamp seja um número
-                message.timestamp = Number(message.timestamp);
-                message.id = childSnapshot.key;
-                messages.push(message);
+                chatContainer.appendChild(typingIndicator);
+                if (isScrolledToBottom()) {
+                    scrollToBottom();
+                }
             });
-            
-            // Ordenação CORRETA por timestamp (do mais antigo para o mais recente)
-            messages.sort((a, b) => a.timestamp - b.timestamp);
-            
-            renderMessages();
-        }, (error) => {
-            console.error('Erro ao carregar mensagens:', error);
-            showError('Erro ao carregar mensagens. Recarregue a página.');
+        }
+    });
+}
+
+// Configura listeners
+function setupListeners() {
+    messageInput.addEventListener('input', adjustTextareaHeight);
+    messageInput.addEventListener('keydown', handleTyping);
+    messageInput.addEventListener('blur', resetTyping);
+    cancelReplyBtn.addEventListener('click', cancelReply);
+}
+
+// Ajusta a altura do textarea
+function adjustTextareaHeight() {
+    messageInput.style.height = 'auto';
+    messageInput.style.height = (messageInput.scrollHeight) + 'px';
+}
+
+// Detecta quando o usuário está digitando
+function handleTyping() {
+    if (!isTyping) {
+        isTyping = true;
+        database.ref('typing/' + currentUser.uid).set({
+            userId: currentUser.uid,
+            isTyping: true,
+            lastTyped: firebase.database.ServerValue.TIMESTAMP
         });
     }
+    
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(resetTyping, TYPING_TIMEOUT_LENGTH);
+}
 
-    // Renderiza as mensagens na ordem CORRETA
-    function renderMessages() {
-        chatContainer.innerHTML = '';
-        
-        if (messages.length === 0) {
-            chatContainer.innerHTML = '<div class="no-messages">Nenhuma mensagem ainda. Seja o primeiro a enviar!</div>';
-            return;
-        }
-        
-        let currentDate = null;
-        
-        // Percorre as mensagens JÁ ORDENADAS
-        messages.forEach((message) => {
-            const messageDate = new Date(message.timestamp);
-            const messageDay = messageDate.toDateString();
-            
-            // Adiciona separador de data se for um novo dia
-            if (messageDay !== currentDate) {
-                currentDate = messageDay;
-                const dateElement = document.createElement('div');
-                dateElement.className = 'message-date';
-                dateElement.textContent = formatDate(messageDate);
-                chatContainer.appendChild(dateElement);
-            }
-            
-            // Cria elemento da mensagem
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${message.sender === currentUser.uid ? 'self-message' : 'other-message'}`;
-            
-            const timeString = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            // Busca informações do remetente
-            firestore.collection('users').doc(message.sender).get().then((userDoc) => {
-                const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
-                
-                messageElement.innerHTML = `
-                    ${message.sender !== currentUser.uid ? `<div class="message-sender">${displayName}</div>` : ''}
-                    <div class="message-text">${escapeHtml(message.text)}</div>
-                    <div class="message-time">
-                        ${timeString}
-                        ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
-                    </div>
-                `;
-                
-                // Adiciona animação apenas para novas mensagens
-                if (Date.now() - message.timestamp < 5000) { // Mensagens com menos de 5 segundos
-                    messageElement.classList.add('new-message');
-                }
-            }).catch((error) => {
-                console.error('Erro ao buscar nome do usuário:', error);
-                const fallbackName = message.sender === currentUser.uid ? 'Você' : `Usuário ${message.sender.substring(0, 5)}`;
-                
-                messageElement.innerHTML = `
-                    ${message.sender !== currentUser.uid ? `<div class="message-sender">${fallbackName}</div>` : ''}
-                    <div class="message-text">${escapeHtml(message.text)}</div>
-                    <div class="message-time">
-                        ${timeString}
-                        ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
-                    </div>
-                `;
-            });
-            
-            chatContainer.appendChild(messageElement);
+// Reseta o status de digitação
+function resetTyping() {
+    if (isTyping) {
+        isTyping = false;
+        database.ref('typing/' + currentUser.uid).set({
+            userId: currentUser.uid,
+            isTyping: false,
+            lastTyped: firebase.database.ServerValue.TIMESTAMP
+        });
+    }
+}
+
+// Modifique a função loadMessages() para garantir que todas as mensagens sejam carregadas
+function loadMessages() {
+    chatContainer.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div>Carregando mensagens...</div></div>';
+    
+    database.ref('messages').orderByChild('timestamp').on('value', (snapshot) => {
+        const newMessages = [];
+        snapshot.forEach((childSnapshot) => {
+            const message = childSnapshot.val();
+            message.timestamp = Number(message.timestamp);
+            message.id = childSnapshot.key;
+            newMessages.push(message);
         });
         
+        newMessages.sort((a, b) => a.timestamp - b.timestamp);
+        
+        // Verifica se há novas mensagens que não estão no array atual
+        const hasNewMessages = newMessages.length !== messages.length || 
+                             !newMessages.every((msg, i) => messages[i] && msg.id === messages[i].id);
+        
+        if (hasNewMessages) {
+            messages = newMessages;
+            
+            // Verifica se já temos mensagens carregadas
+            if (chatContainer.querySelector('.message')) {
+                // Se já tem mensagens, verifica se a última é nova
+                const lastMessage = messages[messages.length - 1];
+                const lastDisplayedId = chatContainer.lastChild?.dataset?.messageId;
+                
+                if (lastMessage && lastDisplayedId !== lastMessage.id) {
+                    // Se a última mensagem não está exibida, renderiza apenas ela
+                    displayMessage(lastMessage);
+                }
+            } else {
+                // Se não tem mensagens, renderiza todas
+                renderMessages();
+            }
+        }
+    });
+}
+
+// Renderiza as mensagens
+function renderMessages() {
+    const wasScrolledToBottom = isScrolledToBottom();
+    const oldScrollHeight = chatContainer.scrollHeight;
+    const oldScrollTop = chatContainer.scrollTop;
+    
+    chatContainer.innerHTML = '';
+    
+    if (messages.length === 0) {
+        chatContainer.innerHTML = '<div class="no-messages">Nenhuma mensagem ainda. Seja o primeiro a enviar!</div>';
+        return;
+    }
+    
+    let currentDate = null;
+    
+    messages.forEach((message) => {
+        const messageDate = new Date(message.timestamp);
+        const messageDay = messageDate.toDateString();
+        
+        if (messageDay !== currentDate) {
+            currentDate = messageDay;
+            const dateElement = document.createElement('div');
+            dateElement.className = 'message-date';
+            dateElement.textContent = formatDate(messageDate);
+            chatContainer.appendChild(dateElement);
+        }
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${message.sender === currentUser.uid ? 'self-message' : 'other-message'}`;
+        messageElement.dataset.messageId = message.id; // Adiciona ID da mensagem
+        
+        // Adiciona evento de clique para responder
+        messageElement.addEventListener('click', () => setReplyMessage(message));
+        
+        const timeString = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        firestore.collection('users').doc(message.sender).get().then(async (userDoc) => { // Adicione async aqui
+    const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
+    
+    let messageContent = '';
+    
+    // Adiciona a mensagem de resposta se existir
+    if (message.replyTo) {
+        const repliedMessage = messages.find(m => m.id === message.replyTo.messageId);
+        if (repliedMessage) {
+            const repliedUserDoc = await firestore.collection('users').doc(repliedMessage.sender).get();
+                    const repliedDisplayName = repliedUserDoc.exists ? repliedUserDoc.data().name : repliedMessage.senderEmail.split('@')[0];
+                    
+                    messageContent += `
+                        <div class="reply-container">
+                            <div class="reply-content">
+                                <div class="reply-sender">${repliedMessage.sender === currentUser.uid ? 'Você' : repliedDisplayName}</div>
+                                <div class="reply-text">${escapeHtml(repliedMessage.text)}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            messageContent += `
+                ${message.sender !== currentUser.uid ? `<div class="message-sender">${displayName}</div>` : ''}
+                <div class="message-text">${escapeHtml(message.text)}</div>
+                <div class="message-time">
+                    ${timeString}
+                    ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
+                </div>
+            `;
+            
+            messageElement.innerHTML = messageContent;
+            
+            if (Date.now() - message.timestamp < 5000) {
+                messageElement.classList.add('new-message');
+            }
+        }).catch((error) => {
+            console.error('Erro ao buscar nome do usuário:', error);
+            const fallbackName = message.sender === currentUser.uid ? 'Você' : `Usuário ${message.sender.substring(0, 5)}`;
+            
+            let messageContent = '';
+            
+            // Adiciona a mensagem de resposta se existir
+            if (message.replyTo) {
+                const repliedMessage = messages.find(m => m.id === message.replyTo.messageId);
+                if (repliedMessage) {
+                    const repliedFallbackName = repliedMessage.sender === currentUser.uid ? 'Você' : `Usuário ${repliedMessage.sender.substring(0, 5)}`;
+                    
+                    messageContent += `
+                        <div class="reply-container">
+                            <div class="reply-content">
+                                <div class="reply-sender">${repliedFallbackName}</div>
+                                <div class="reply-text">${escapeHtml(repliedMessage.text)}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            messageContent += `
+                ${message.sender !== currentUser.uid ? `<div class="message-sender">${fallbackName}</div>` : ''}
+                <div class="message-text">${escapeHtml(message.text)}</div>
+                <div class="message-time">
+                    ${timeString}
+                    ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
+                </div>
+            `;
+            
+            messageElement.innerHTML = messageContent;
+        });
+        
+        chatContainer.appendChild(messageElement);
+    });
+    
+    if (!wasScrolledToBottom) {
+        const newScrollHeight = chatContainer.scrollHeight;
+        chatContainer.scrollTop = oldScrollTop + (newScrollHeight - oldScrollHeight);
+    }
+}
+
+// Exibe uma mensagem individual
+async function displayMessage(message) {
+    // Verifica se a mensagem já está sendo exibida
+    if (document.querySelector(`[data-message-id="${message.id}"]`)) {
+        return;
+    }
+
+    const wasScrolledToBottom = isScrolledToBottom();
+    
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${message.sender === currentUser.uid ? 'self-message' : 'other-message'} new-message`;
+    messageElement.dataset.messageId = message.id; // Adiciona ID da mensagem
+    
+    // Adiciona evento de clique para responder
+    messageElement.addEventListener('click', () => setReplyMessage(message));
+    
+    const date = new Date(message.timestamp);
+    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    try {
+        const userDoc = await firestore.collection('users').doc(message.sender).get();
+        const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
+        
+        let messageContent = '';
+        
+        // Adiciona a mensagem de resposta se existir
+        if (message.replyTo) {
+            const repliedMessage = messages.find(m => m.id === message.replyTo.messageId);
+            if (repliedMessage) {
+                const repliedUserDoc = await firestore.collection('users').doc(repliedMessage.sender).get();
+                const repliedDisplayName = repliedUserDoc.exists ? repliedUserDoc.data().name : repliedMessage.senderEmail.split('@')[0];
+                
+                messageContent += `
+                    <div class="reply-container">
+                        <div class="reply-content">
+                            <div class="reply-sender">${repliedMessage.sender === currentUser.uid ? 'Você' : repliedDisplayName}</div>
+                            <div class="reply-text">${escapeHtml(repliedMessage.text)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        messageContent += `
+            ${message.sender !== currentUser.uid ? `<div class="message-sender">${displayName}</div>` : ''}
+            <div class="message-text">${escapeHtml(message.text)}</div>
+            <div class="message-time">
+                ${timeString}
+                ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
+            </div>
+        `;
+        
+        messageElement.innerHTML = messageContent;
+    } catch (error) {
+        console.error('Erro ao buscar nome do usuário:', error);
+        const fallbackName = message.sender === currentUser.uid ? 'Você' : `Usuário ${message.sender.substring(0, 5)}`;
+        
+        let messageContent = '';
+        
+        // Adiciona a mensagem de resposta se existir
+        if (message.replyTo) {
+            const repliedMessage = messages.find(m => m.id === message.replyTo.messageId);
+            if (repliedMessage) {
+                const repliedFallbackName = repliedMessage.sender === currentUser.uid ? 'Você' : `Usuário ${repliedMessage.sender.substring(0, 5)}`;
+                
+                messageContent += `
+                    <div class="reply-container">
+                        <div class="reply-content">
+                            <div class="reply-sender">${repliedFallbackName}</div>
+                            <div class="reply-text">${escapeHtml(repliedMessage.text)}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        messageContent += `
+            ${message.sender !== currentUser.uid ? `<div class="message-sender">${fallbackName}</div>` : ''}
+            <div class="message-text">${escapeHtml(message.text)}</div>
+            <div class="message-time">
+                ${timeString}
+                ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
+            </div>
+        `;
+        
+        messageElement.innerHTML = messageContent;
+    }
+    
+    chatContainer.appendChild(messageElement);
+    
+    if (wasScrolledToBottom) {
         scrollToBottom();
     }
+}
 
+// Formata a data
+function formatDate(date) {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (date.toDateString() === today.toDateString()) {
+        return 'Hoje';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+        return 'Ontem';
+    } else {
+        return date.toLocaleDateString('pt-BR', { 
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'long',
+            year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+        });
+    }
+}
+
+// Escapa HTML
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// Configura a mensagem para responder
+async function setReplyMessage(message) {
+    try {
+        const userDoc = await firestore.collection('users').doc(message.sender).get();
+        const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
         
-        // Formata a data para exibição
-        function formatDate(date) {
-            const today = new Date();
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-            
-            if (date.toDateString() === today.toDateString()) {
-                return 'Hoje';
-            } else if (date.toDateString() === yesterday.toDateString()) {
-                return 'Ontem';
-            } else {
-                return date.toLocaleDateString('pt-BR', { 
-                    weekday: 'long', 
-                    day: 'numeric', 
-                    month: 'long',
-                    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
-                });
-            }
+        replyingTo = {
+            messageId: message.id,
+            senderId: message.sender,
+            senderName: displayName,
+            text: message.text
+        };
+        
+        // Atualiza a pré-visualização da resposta
+        replySenderName.textContent = displayName;
+        replyPreviewText.textContent = message.text;
+        replyPreview.style.display = 'block';
+        
+        // Foca no campo de mensagem
+        messageInput.focus();
+        
+        // Rola para o final do chat
+        scrollToBottom();
+    } catch (error) {
+        console.error('Erro ao configurar resposta:', error);
+        const fallbackName = message.sender === currentUser.uid ? 'Você' : `Usuário ${message.sender.substring(0, 5)}`;
+        
+        replyingTo = {
+            messageId: message.id,
+            senderId: message.sender,
+            senderName: fallbackName,
+            text: message.text
+        };
+        
+        replySenderName.textContent = fallbackName;
+        replyPreviewText.textContent = message.text;
+        replyPreview.style.display = 'block';
+        messageInput.focus();
+        scrollToBottom();
+    }
+}
+
+// Cancela a resposta
+function cancelReply() {
+    replyingTo = null;
+    replyPreview.style.display = 'none';
+    messageInput.focus();
+}
+
+// Envia mensagem
+messageForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const messageText = messageInput.value.trim();
+    if (messageText === '' || !currentUser) return;
+    
+    try {
+        const sendButton = messageForm.querySelector('button');
+        sendButton.disabled = true;
+        
+        const newMessageRef = database.ref('messages').push();
+        const newMessage = {
+            text: messageText,
+            sender: currentUser.uid,
+            senderEmail: currentUser.email,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+        
+        // Adiciona a referência da mensagem respondida, se existir
+        if (replyingTo) {
+            newMessage.replyTo = {
+                messageId: replyingTo.messageId,
+                senderId: replyingTo.senderId,
+                senderName: replyingTo.senderName,
+                text: replyingTo.text.substring(0, 100) + (replyingTo.text.length > 100 ? '...' : '')
+            };
         }
         
-        // Exibe uma mensagem no chat
-        async function displayMessage(message) {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${message.sender === currentUser.uid ? 'self-message' : 'other-message'} new-message`;
-            
-            const date = new Date(message.timestamp);
-            const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            try {
-                const userDoc = await firestore.collection('users').doc(message.sender).get();
-                const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
-                
-                messageElement.innerHTML = `
-                    ${message.sender !== currentUser.uid ? `<div class="message-sender">${displayName}</div>` : ''}
-                    <div class="message-text">${escapeHtml(message.text)}</div>
-                    <div class="message-time">
-                        ${timeString}
-                        ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
-                    </div>
-                `;
-                
-            } catch (error) {
-                console.error('Erro ao buscar nome do usuário:', error);
-                const fallbackName = message.sender === currentUser.uid ? 'Você' : `Usuário ${message.sender.substring(0, 5)}`;
-                messageElement.innerHTML = `
-                    ${message.sender !== currentUser.uid ? `<div class="message-sender">${fallbackName}</div>` : ''}
-                    <div class="message-text">${escapeHtml(message.text)}</div>
-                    <div class="message-time">
-                        ${timeString}
-                        ${message.sender === currentUser.uid ? `<span class="message-status"><i class="fas fa-check-double"></i></span>` : ''}
-                    </div>
-                `;
-            }
-            
-            chatContainer.appendChild(messageElement);
-        }
+        await newMessageRef.set(newMessage);
         
-        // Escapa HTML para prevenir XSS
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+        // Adiciona a nova mensagem localmente imediatamente
+        newMessage.id = newMessageRef.key;
+        newMessage.timestamp = Date.now(); // Usa o timestamp atual como aproximação
+        if (replyingTo) {
+            newMessage.replyTo = replyingTo;
         }
+        messages.push(newMessage);
+        displayMessage(newMessage);
         
-        // Envia uma mensagem
-        messageForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const messageText = messageInput.value.trim();
-            if (messageText === '' || !currentUser) return;
-            
-            try {
-                // Desabilita o botão de enviar durante o processamento
-                const sendButton = messageForm.querySelector('button');
-                sendButton.disabled = true;
-                
-                const newMessageRef = database.ref('messages').push();
-                await newMessageRef.set({
-                    text: messageText,
-                    sender: currentUser.uid,
-                    senderEmail: currentUser.email,
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
-                });
-                
-                // Atualiza o último acesso do usuário
-                await firestore.collection('users').doc(currentUser.uid).update({
-                    lastActive: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                // Limpa e reseta o input
-                messageInput.value = '';
-                messageInput.style.height = 'auto';
-                
-                // Reabilita o botão
-                sendButton.disabled = false;
-                
-            } catch (error) {
-                console.error('Erro ao enviar mensagem:', error);
-                showError('Erro ao enviar mensagem. Tente novamente.');
-                
-                // Reabilita o botão em caso de erro
-                messageForm.querySelector('button').disabled = false;
-            }
+        await firestore.collection('users').doc(currentUser.uid).update({
+            lastActive: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        // Rolagem automática para o final do chat
-        function scrollToBottom() {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
+        messageInput.value = '';
+        messageInput.style.height = 'auto';
+        sendButton.disabled = false;
         
-        // Mostra mensagem de erro
-        function showError(message) {
-            const errorElement = document.createElement('div');
-            errorElement.className = 'error-message';
-            errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-            chatContainer.appendChild(errorElement);
-            scrollToBottom();
-        }
+        // Reseta a resposta após enviar
+        cancelReply();
         
-        // Detecta quando o usuário está digitando
-        function handleTyping() {
-            if (!isTyping) {
-                isTyping = true;
-                // Aqui você pode implementar o envio de status "digitando" para outros usuários
+        setTimeout(() => {
+            if (isScrolledToBottom()) {
+                scrollToBottom();
             }
+        }, 100);
+    } catch (error) {
+        console.error('Erro ao enviar mensagem:', error);
+        showError('Erro ao enviar mensagem. Tente novamente.');
+        messageForm.querySelector('button').disabled = false;
+    }
+});
+
+// Mostra mensagem de erro
+function showError(message) {
+    const errorElement = document.createElement('div');
+    errorElement.className = 'error-message';
+    errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    chatContainer.appendChild(errorElement);
+    scrollToBottom();
+}
+
+// Redireciona para login
+function redirectToLogin() {
+    showError('Usuário não autenticado. Redirecionando para login...');
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 2000);
+}
+
+// Configura tecla Enter
+messageInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        messageForm.dispatchEvent(new Event('submit'));
+    }
+});
+
+// Carrega informações do usuário
+async function loadUserInfo() {
+    try {
+        const userDoc = await firestore.collection('users').doc(currentUser.uid).get();
+        
+        if (userDoc.exists) {
+            userName = userDoc.data().name || currentUser.displayName || currentUser.email.split('@')[0];
+        } else {
+            userName = currentUser.displayName || currentUser.email.split('@')[0];
+            await firestore.collection('users').doc(currentUser.uid).set({
+                name: userName,
+                email: currentUser.email,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastActive: firebase.firestore.FieldValue.serverTimestamp(),
+                avatarColor: getRandomColor()
+            });
         }
         
-        // Reseta o status de digitação
-        function resetTyping() {
-            if (isTyping) {
-                isTyping = false;
-                // Aqui você pode implementar o envio de status "parou de digitar" para outros usuários
-            }
-        }
-        
-        // Envia mensagem com Enter (mas adiciona nova linha com Shift+Enter)
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                messageForm.dispatchEvent(new Event('submit'));
-            }
+        updateUserAvatar();
+    } catch (error) {
+        console.error('Erro ao carregar informações do usuário:', error);
+        userName = currentUser.email.split('@')[0];
+    }
+}
+
+// Gera cor aleatória para avatar
+function getRandomColor() {
+    const colors = ['#1e88e5', '#e53935', '#8e24aa', '#43a047', '#fb8c00', '#00acc1'];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// Atualiza avatar
+function updateUserAvatar() {
+    const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+    userAvatar.textContent = initials.substring(0, 2);
+    
+    firestore.collection('users').doc(currentUser.uid).get()
+        .then(doc => {
+            const color = doc.exists && doc.data().avatarColor ? doc.data().avatarColor : getRandomColor();
+            userAvatar.style.backgroundColor = color;
+            userAvatar.style.color = getContrastColor(color);
         });
-        
-        // Inicializa o chat quando a página carrega
-        window.addEventListener('DOMContentLoaded', () => {
-            messageInput.focus();
-            initChat();
+}
+
+// Cor contrastante para texto
+function getContrastColor(hexColor) {
+    const r = parseInt(hexColor.substr(1, 2), 16);
+    const g = parseInt(hexColor.substr(3, 2), 16);
+    const b = parseInt(hexColor.substr(5, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 128 ? '#000000' : '#FFFFFF';
+}
+
+// Atualiza exibição do usuário
+function updateUserInfoDisplay() {
+    userNameSpan.textContent = userName;
+    logoutBtn.addEventListener('click', logout);
+}
+
+// Função de logout
+function logout() {
+    database.ref('typing/' + currentUser.uid).remove();
+    auth.signOut()
+        .then(() => {
+            window.location.href = 'login.html';
+        })
+        .catch((error) => {
+            console.error('Erro ao fazer logout:', error);
+            showError('Erro ao sair. Tente novamente.');
         });
+}
+
+// Inicializa o chat quando a página carrega
+window.addEventListener('DOMContentLoaded', () => {
+    messageInput.focus();
+    initChat();
+});
     </script>
 </body>
 </html>
