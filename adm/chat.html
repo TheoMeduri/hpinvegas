@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="chat.css">
 </head>
-<body>
+<body class="dark">
     <div class="header">
         <div class="header-content">
             <div class="logo">
@@ -106,29 +106,61 @@ let messages = [];
 let isTyping = false;
 let typingTimeout;
 let replyingTo = null; // Armazena a mensagem que está sendo respondida
-const TYPING_TIMEOUT_LENGTH = 2000;
+const TYPING_TIMEOUT_LENGTH = 500;
 
 // Função para verificar se está no final do chat
 function isScrolledToBottom() {
     return chatContainer.scrollHeight - chatContainer.clientHeight <= chatContainer.scrollTop + 1;
 }
 
-// Rolagem suave para o final do chat
 function scrollToBottom() {
-    chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: 'smooth'
-    });
+    const chatContainer = document.getElementById('chat-container');
+    if (!chatContainer) return;
+    
+    // Força um reflow antes de scrollar
+    void chatContainer.offsetHeight;
+    
+    // Scroll com opções de comportamento e fallback
+    try {
+        chatContainer.scroll({
+            top: chatContainer.scrollHeight,
+            behavior: 'smooth'
+        });
+    } catch (e) {
+        // Fallback para browsers mais antigos
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Double check após um pequeno delay
+    setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, 300);
 }
 
-// Inicializa o chat
+
 async function initChat() {
     try {
         await checkAuthState();
         setupListeners();
+        
+        // Adicione um listener específico para quando as mensagens carregarem
+        const messagesLoaded = new Promise((resolve) => {
+            const checkMessages = setInterval(() => {
+                if (messages.length > 0 || document.querySelector('.message, .no-messages')) {
+                    clearInterval(checkMessages);
+                    resolve();
+                }
+            }, 100);
+        });
+        
+        loadMessages(); // Inicia o carregamento
+        await messagesLoaded; // Aguarda até que algo seja renderizado
+        
+        // Força o scroll após pequeno delay para garantir renderização
+        setTimeout(scrollToBottom, 100);
+        
     } catch (error) {
-        console.error('Erro na inicialização do chat:', error);
-        showError('Erro ao conectar ao chat. Recarregue a página.');
+        console.error('Erro na inicialização:', error);
     }
 }
 
@@ -154,10 +186,10 @@ async function checkAuthState() {
         });
     });
 }
-
 // Configura o listener para status de digitação
 function setupTypingListener() {
     database.ref('typing').on('value', (snapshot) => {
+        // Remove qualquer indicador existente
         const existingTypingIndicator = document.querySelector('.typing-indicator');
         if (existingTypingIndicator) {
             existingTypingIndicator.remove();
@@ -199,7 +231,10 @@ function setupTypingListener() {
                     </div>
                 `;
                 
+                // Sempre adiciona no final do container
                 chatContainer.appendChild(typingIndicator);
+                scrollToBottom();
+                // Rola para o final se já estiver perto do final
                 if (isScrolledToBottom()) {
                     scrollToBottom();
                 }
@@ -295,6 +330,12 @@ function renderMessages() {
     const oldScrollHeight = chatContainer.scrollHeight;
     const oldScrollTop = chatContainer.scrollTop;
     
+    // Remove temporariamente o indicador de digitação se existir
+    const typingIndicator = document.querySelector('.typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+    
     chatContainer.innerHTML = '';
     
     if (messages.length === 0) {
@@ -325,16 +366,16 @@ function renderMessages() {
         
         const timeString = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
-        firestore.collection('users').doc(message.sender).get().then(async (userDoc) => { // Adicione async aqui
-    const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
-    
-    let messageContent = '';
-    
-    // Adiciona a mensagem de resposta se existir
-    if (message.replyTo) {
-        const repliedMessage = messages.find(m => m.id === message.replyTo.messageId);
-        if (repliedMessage) {
-            const repliedUserDoc = await firestore.collection('users').doc(repliedMessage.sender).get();
+        firestore.collection('users').doc(message.sender).get().then(async (userDoc) => {
+            const displayName = userDoc.exists ? userDoc.data().name : message.senderEmail.split('@')[0];
+            
+            let messageContent = '';
+            
+            // Adiciona a mensagem de resposta se existir
+            if (message.replyTo) {
+                const repliedMessage = messages.find(m => m.id === message.replyTo.messageId);
+                if (repliedMessage) {
+                    const repliedUserDoc = await firestore.collection('users').doc(repliedMessage.sender).get();
                     const repliedDisplayName = repliedUserDoc.exists ? repliedUserDoc.data().name : repliedMessage.senderEmail.split('@')[0];
                     
                     messageContent += `
@@ -395,17 +436,23 @@ function renderMessages() {
             `;
             
             messageElement.innerHTML = messageContent;
+            scrollToBottom();
         });
         
         chatContainer.appendChild(messageElement);
     });
+    
+    // Re-adiciona o indicador de digitação no final, se existir
+    if (typingIndicator) {
+        chatContainer.appendChild(typingIndicator);
+        scrollToBottom();
+    }
     
     if (!wasScrolledToBottom) {
         const newScrollHeight = chatContainer.scrollHeight;
         chatContainer.scrollTop = oldScrollTop + (newScrollHeight - oldScrollHeight);
     }
 }
-
 // Exibe uma mensagem individual
 async function displayMessage(message) {
     // Verifica se a mensagem já está sendo exibida
@@ -414,6 +461,12 @@ async function displayMessage(message) {
     }
 
     const wasScrolledToBottom = isScrolledToBottom();
+    
+    // Remove temporariamente o indicador de digitação se existir
+    const typingIndicator = document.querySelector('.typing-indicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
     
     const messageElement = document.createElement('div');
     messageElement.className = `message ${message.sender === currentUser.uid ? 'self-message' : 'other-message'} new-message`;
@@ -495,6 +548,11 @@ async function displayMessage(message) {
     }
     
     chatContainer.appendChild(messageElement);
+    scrollToBottom();
+    // Re-adiciona o indicador de digitação no final, se existir
+    if (typingIndicator) {
+        chatContainer.appendChild(typingIndicator);
+    }
     
     if (wasScrolledToBottom) {
         scrollToBottom();
@@ -740,11 +798,11 @@ function logout() {
         });
 }
 
-// Inicializa o chat quando a página carrega
 window.addEventListener('DOMContentLoaded', () => {
     messageInput.focus();
     initChat();
 });
+
     </script>
 </body>
 </html>
