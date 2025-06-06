@@ -31,28 +31,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Autenticação
 function initAuth() {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      state.usuario = user;
-      carregarDados();
-      
-      // Formata o email para mostrar como nome
-      const emailText = document.getElementById('email');
-      if (emailText) {
-        const email = user.email;
-        const rawName = email.split('@')[0];
-        const nameParts = rawName.match(/[a-zA-Z]+/g) || ['Usuário'];
-        const nameFormatted = nameParts
-          .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
-          .join(' ');
-        emailText.textContent = nameFormatted;
-      }
-      
-      mostrarNotificacao(`Bem-vindo, ${user.email}`, 'success');
-    } else {
+  auth.onAuthStateChanged(async user => {
+    if (!user) {
       window.location.href = 'login.html';
+      return;
+    }
+
+    try {
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      
+      if (!userDoc.exists || !userDoc.data().isAdmin) {
+        mostrarNotificacao('Acesso restrito a administradores', 'error');
+        setTimeout(() => window.location.href = '../', 500);
+        return;
+      }
+
+      // Atualiza a UI com os dados do usuário
+      updateUserProfileUI(userDoc.data());
+      
+      carregarDados();
+      mostrarNotificacao(`Bem-vindo, ${user.email}`, 'success');
+    } catch (error) {
+      console.error('Erro ao verificar permissões:', error);
+      mostrarNotificacao('Erro ao verificar permissões', 'error');
+      setTimeout(() => window.location.href = '../', 2000);
     }
   });
+}
+
+// Função para atualizar o perfil do usuário na UI
+function updateUserProfileUI(userData) {
+  // Avatar - pega as iniciais do nome
+  const avatarElement = document.getElementById('user-avatar');
+  if (avatarElement && userData.name) {
+    const initials = userData.name.split(' ')
+      .map(part => part[0]?.toUpperCase() || '')
+      .join('')
+      .substring(0, 2);
+    avatarElement.textContent = initials || 'AD';
+  }
+
+  // Nome de usuário
+  const usernameElement = document.getElementById('username');
+  if (usernameElement) {
+    usernameElement.textContent = userData.name || 'Administrador';
+  }
+
+  // Função (role)
+  const roleElement = document.getElementById('user-role');
+  if (roleElement) {
+    roleElement.textContent = userData.isAdmin ? 'Administrador' : 'Usuário';
+  }
+
+  // Email (se necessário em outro lugar)
+  const emailText = document.getElementById('email');
+  if (emailText) {
+    emailText.textContent = userData.name || userData.email.split('@')[0];
+  }
 }
 
 function setupTabs() {
