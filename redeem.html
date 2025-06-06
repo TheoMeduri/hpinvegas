@@ -9,7 +9,16 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <style>
+<style>
+    :root {
+      --primary: #6e48aa;
+      --secondary: #9d50bb;
+      --accent: #c86dd7;
+      --light-bg: #f9f5ff;
+      --text: #2d2a32;
+      --text-light: #5a5763;
+    }
+    
     * {
       margin: 0;
       padding: 0;
@@ -18,311 +27,123 @@
     }
     
     body {
-      background-color: #f8f9fa;
-      color: #333;
+      background-color: var(--light-bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(110, 72, 170, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(157, 80, 187, 0.05) 0%, transparent 20%);
+      background-size: 100% 100%;
+      background-attachment: fixed;
     }
     
     .header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
+      position: relative;
     }
     
     .logo {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #6e48aa;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
       margin-bottom: 0.5rem;
+      letter-spacing: -1px;
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 4px rgba(110, 72, 170, 0.1);
+    }
+    
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 3px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    
+    .logo:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
     }
     
     .subtitle {
-      color: #666;
+      color: var(--text-light);
       font-weight: 400;
+      font-size: 1rem;
+      max-width: 500px;
+      line-height: 1.6;
+      opacity: 0.9;
     }
     
     .search-container {
       width: 100%;
-      max-width: 500px;
-      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .search-container::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: -10px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+      z-index: -1;
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .search-container:hover::before {
+      opacity: 1;
     }
     
     .search-bar {
       display: flex;
       background: white;
-      border-radius: 50px;
-      padding: 0.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .event-select {
-      width: 100%;
-      max-width: 500px;
-      margin-bottom: 10px;
-      font-size: 1rem;
-      outline: none;
-      background: white;
-      border: none;
-      border-radius: 50px;
-      padding: 1.2rem 1.3rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      color: #666;
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1.3rem center;
-      background-size: 1em;
-    }
-    
-    .search-input {
-      flex: 1;
-      border: none;
-      padding: 0.8rem 1rem;
-      font-size: 1rem;
-      outline: none;
-      background: transparent;
-    }
-    
-    .search-button {
-      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 0 1.5rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 500;
-    }
-    
-    .ticket-status {
-      background: white;
       border-radius: 16px;
-      padding: 3rem 2rem;
-      text-align: center;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 0.75rem;
+      box-shadow: 
+        0 10px 30px rgba(110, 72, 170, 0.15),
+        0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(110, 72, 170, 0.1);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      backdrop-filter: blur(5px);
+      background-color: rgba(255, 255, 255, 0.85);
     }
     
-    .status-icon {
-      font-size: 3rem;
-      color: #6e48aa;
-      margin-bottom: 1rem;
-    }
-    
-    .status-title {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
-    
-    .status-message {
-      color: #666;
-      margin-bottom: 1.5rem;
-    }
-    
-    .try-again {
-      color: #6e48aa;
-      font-weight: 500;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    
-    /* Modal de login */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    
-    .modal-title {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      color: #6e48aa;
-      text-align: center;
-    }
-    
-    .input-group {
-      margin-bottom: 1.5rem;
-    }
-    
-    .input-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #666;
-    }
-    
-    .input-group input {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    
-    .auth-button {
-      width: 100%;
-      padding: 1rem;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
-      color: white;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin-bottom: 1rem;
-    }
-    
-    .auth-switch {
-      text-align: center;
-      color: #666;
-    }
-    
-    .auth-switch a {
-      color: #6e48aa;
-      cursor: pointer;
+    .search-bar:hover {
+      box-shadow: 
+        0 15px 35px rgba(110, 72, 170, 0.2),
+        0 5px 15px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
     }
 
-    
-    
-    /* Estilo aprimorado para o ticket encontrado */
-.ticket-info {
-  background: white;
-  border-radius: 16px;
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  margin: 2rem auto;
-  text-align: left;
-  border: 1px solid rgba(110, 72, 170, 0.1);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.ticket-info::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5px;
-  height: 100%;
-  background: linear-gradient(to bottom, #6e48aa, #9d50bb);
-}
-
-.ticket-info:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-}
-
-.ticket-info h3 {
-  color: #6e48aa;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 0.75rem;
-}
-
-.ticket-info h3::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 50px;
-  height: 3px;
-  background: linear-gradient(to right, #6e48aa, #9d50bb);
-  border-radius: 3px;
-}
-
-.ticket-info p {
-  margin-bottom: 1rem;
-  color: #555;
-  font-size: 1rem;
-  line-height: 1.6;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.ticket-info strong {
-  color: #333;
-  font-weight: 500;
-  min-width: 100px;
-  display: inline-block;
-}
-
-.ticket-info span {
-  color: #444;
-  font-weight: 400;
-  flex: 1;
-}
-
-.redeem-button {
-  background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  width: 100%;
-  margin-top: 2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.2);
-}
-
-.redeem-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(110, 72, 170, 0.3);
-}
-
-.redeem-button:active {
-  transform: translateY(0);
-}
-
-.redeem-button:disabled {
-  background: #e0e0e0;
-  color: #999;
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
-}
-
-/* Efeito de loading no botão */
-.redeem-button.loading {
+    .redeem-button.sending {
   position: relative;
   color: transparent;
 }
 
-.redeem-button.loading::after {
+.redeem-button.sending::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -330,61 +151,612 @@
   transform: translate(-50%, -50%);
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid rgba(255,255,255,0.3);
   border-top-color: white;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
-@keyframes spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* Responsividade */
-@media (max-width: 480px) {
-  .ticket-info {
-    padding: 1.5rem;
-    margin: 1rem auto;
-  }
-  
-  .ticket-info h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1.2rem;
-  }
-  
-  .ticket-info p {
-    font-size: 0.9rem;
-    flex-direction: column;
-  }
-  
-  .ticket-info strong {
-    min-width: auto;
-    margin-bottom: 0.2rem;
-  }
-}
-    .redeem-button {
-      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+    
+    .event-select {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      outline: none;
+      background: white;
+      border: 1px solid rgba(110, 72, 170, 0.15);
+      border-radius: 16px;
+      padding: 1.3rem 1.5rem;
+      box-shadow: 0 5px 20px rgba(110, 72, 170, 0.1);
+      color: var(--text-light);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1.5rem center;
+      background-size: 1em;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      background-color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .event-select:focus {
+      border-color: var(--accent);
+      box-shadow: 
+        0 0 0 3px rgba(200, 109, 215, 0.2),
+        0 10px 25px rgba(110, 72, 170, 0.2);
+    }
+    
+    .search-input {
+      flex: 1;
+      border: none;
+      padding: 0.8rem 1rem;
+      font-size: 1.05rem;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+    }
+    
+    .search-input::placeholder {
+      color: var(--text-light);
+      opacity: 0.6;
+    }
+    
+    .search-button {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 100%;
-      margin-top: 1.5rem;
-      font-size: 1rem;
-      font-weight: 500;
+      border-radius: 12px;
+      padding: 0 2rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 
+        0 4px 6px rgba(110, 72, 170, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .search-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 7px 14px rgba(110, 72, 170, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .search-button:hover::before {
+      left: 100%;
+    }
+    
+    .search-button:active {
+      transform: translateY(0);
+    }
+    
+    .ticket-status {
+      background: white;
+      border-radius: 24px;
+      padding: 3.5rem 2.5rem;
+      text-align: center;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 
+        0 15px 35px rgba(110, 72, 170, 0.15),
+        0 5px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(110, 72, 170, 0.1);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+      background-color: rgba(255, 255, 255, 0.9);
+      margin: 2rem 0;
+    }
+    
+    .ticket-status::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+    
+    .ticket-status::after {
+      content: "";
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(110, 72, 170, 0.3), transparent);
+    }
+    
+    .status-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      filter: drop-shadow(0 4px 8px rgba(110, 72, 170, 0.2));
+    }
+    
+    .status-title {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .status-message {
+      color: var(--text-light);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      font-size: 1.05rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .try-again {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      background: rgba(110, 72, 170, 0.1);
+    }
+    
+    .try-again:hover {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 5px 15px rgba(110, 72, 170, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    /* Estilo de ingresso premium */
+    .ticket-info {
+      background: white;
+      border-radius: 24px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 
+        0 20px 40px rgba(110, 72, 170, 0.2),
+        0 5px 15px rgba(0, 0, 0, 0.08);
+      margin: 3rem auto;
+      text-align: left;
+      border: 1px solid rgba(110, 72, 170, 0.15);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+      background-color: rgba(255, 255, 255, 0.92);
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .ticket-info:hover {
+      transform: translateY(-5px) rotateX(1deg) rotateY(1deg);
+      box-shadow: 
+        0 25px 50px rgba(110, 72, 170, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .ticket-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    }
+    
+    .ticket-info::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--light-bg);
+      box-shadow: 
+        inset 0 0 0 3px white,
+        inset 0 0 0 6px rgba(110, 72, 170, 0.2);
+    }
+    
+    .ticket-info h3 {
+      color: var(--primary);
+      margin-bottom: 2rem;
+      font-size: 1.75rem;
+      font-weight: 800;
+      position: relative;
+      padding-bottom: 1.5rem;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+    
+    .ticket-info h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 4px;
+      opacity: 0.7;
+    }
+    
+    .ticket-info p {
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      display: flex;
+      flex-wrap: wrap;
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .ticket-info p::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.75rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 2px 5px rgba(110, 72, 170, 0.3);
+    }
+    
+    .ticket-info strong {
+      color: var(--text);
+      font-weight: 700;
+      min-width: 150px;
+      display: inline-block;
+      margin-right: 1rem;
+    }
+    
+    .ticket-info span {
+      color: var(--text-light);
+      font-weight: 400;
+      flex: 1;
+      opacity: 0.9;
+    }
+    
+    .redeem-button {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      width: 100%;
+      margin-top: 3rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      letter-spacing: 0.5px;
+      box-shadow: 
+        0 10px 20px rgba(110, 72, 170, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .redeem-button:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 
+        0 15px 30px rgba(110, 72, 170, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      letter-spacing: 1.5px;
+    }
+    
+    .redeem-button:active {
+      transform: translateY(0);
     }
     
     .redeem-button:disabled {
-      background: #ccc;
+      background: #e0e0e0;
+      color: #999;
       cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
     }
     
-    @media (max-width: 480px) {
+    .redeem-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: 0.5s;
+    }
+    
+    .redeem-button:hover::before {
+      left: 100%;
+    }
+    
+    .redeem-button::after {
+      content: '';
+      position: absolute;
+      top: -150%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+      transform: rotate(45deg);
+      animation: shine 3s infinite ease-in-out;
+      opacity: 0;
+    }
+    
+    .redeem-button:hover::after {
+      opacity: 1;
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.8;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+    
+    /* Modal de login premium */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 3rem;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(110, 72, 170, 0.2);
+      position: relative;
+      transform-style: preserve-3d;
+      transform: perspective(1000px) rotateY(0deg);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: modalAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+    
+    @keyframes modalAppear {
+      from { 
+        transform: perspective(1000px) rotateY(90deg);
+        opacity: 0;
+      }
+      to { 
+        transform: perspective(1000px) rotateY(0deg);
+        opacity: 1;
+      }
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      border-radius: 24px 24px 0 0;
+    }
+    
+    .modal-content::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 20px;
+      right: 20px;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.1);
+      filter: blur(10px);
+      z-index: -1;
+      border-radius: 50%;
+    }
+    
+    .modal-title {
+      font-size: 1.75rem;
+      margin-bottom: 2rem;
+      color: var(--primary);
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .input-group {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 0.75rem;
+      color: var(--text-light);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(110, 72, 170, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 10px rgba(110, 72, 170, 0.05);
+    }
+    
+    .input-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 
+        0 0 0 3px rgba(200, 109, 215, 0.2),
+        0 5px 15px rgba(110, 72, 170, 0.2);
+      outline: none;
+    }
+    
+    .auth-button {
+      width: 100%;
+      padding: 1.25rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 
+        0 5px 15px rgba(110, 72, 170, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .auth-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 10px 20px rgba(110, 72, 170, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    
+    .auth-button:active {
+      transform: translateY(0);
+    }
+    
+    .auth-switch {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-top: 1.5rem;
+    }
+    
+    .auth-switch a {
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .auth-switch a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    
+    .auth-switch a:hover {
+      color: var(--accent);
+    }
+    
+    .auth-switch a:hover::after {
+      width: 100%;
+    }
+    
+    /* Responsividade Premium */
+    @media (max-width: 768px) {
       body {
         padding: 1.5rem;
       }
       
+      .logo {
+        font-size: 2rem;
+      }
+      
+      .ticket-info, .ticket-status {
+        padding: 2rem 1.5rem;
+        border-radius: 20px;
+      }
+      
+      .ticket-info h3 {
+        font-size: 1.5rem;
+      }
+      
+      .ticket-info p {
+        font-size: 1rem;
+        padding-left: 1.5rem;
+      }
+      
+      .ticket-info strong {
+        min-width: 120px;
+      }
+      
+      .modal-content {
+        padding: 2rem 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
       .logo {
         font-size: 1.8rem;
       }
@@ -394,14 +766,25 @@
       }
       
       .search-button {
-        padding: 0 1rem;
+        padding: 0 1.25rem;
       }
       
-      .event-select {
-        padding: 0.8rem 0.5rem;
+      .ticket-info p {
+        flex-direction: column;
+      }
+      
+      .ticket-info strong {
+        min-width: auto;
+        margin-bottom: 0.5rem;
+      }
+      
+      .ticket-info::after {
+        right: 20px;
+        width: 25px;
+        height: 25px;
       }
     }
-  </style>
+</style>
 </head>
 <body>
   <div class="header">
@@ -492,6 +875,13 @@
     </div>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
+<script>
+  // Inicialize o EmailJS com seu User ID
+  (function() {
+emailjs.init("dP-L8njbPsvYrxoKL"); // Seu User ID
+  })();
+</script>
   <script>
     // Configuração do Firebase
     const firebaseConfig = {
@@ -586,28 +976,28 @@ function checkAuth() {
     if (user) {
       currentUser = user;
       loadEvents();
-      loadUserTickets(); // Carrega os ingressos do usuário
+      // loadUserTickets(); // Carrega os ingressos do usuário
     } else {
       showLoginModal();
     }
   });
 }
-function loadUserTickets() {
-  db.collection("users").doc(currentUser.uid).collection("tickets").get()
-    .then((querySnapshot) => {
-      const tickets = [];
-      querySnapshot.forEach((doc) => {
-        tickets.push({
-          id: doc.id,
-          ...doc.data()
-        });
-      });
-      displayUserTickets(tickets);
-    })
-    .catch((error) => {
-      console.error("Erro ao carregar ingressos do usuário:", error);
-    });
-}
+// function loadUserTickets() {
+//   db.collection("users").doc(currentUser.uid).collection("tickets").get()
+//     .then((querySnapshot) => {
+//       const tickets = [];
+//       querySnapshot.forEach((doc) => {
+//         tickets.push({
+//           id: doc.id,
+//           ...doc.data()
+//         });
+//       });
+//       displayUserTickets(tickets);
+//     })
+//     .catch((error) => {
+//       console.error("Erro ao carregar ingressos do usuário:", error);
+//     });
+// }
 
     // Mostrar modal de login
     function showLoginModal() {
@@ -816,7 +1206,7 @@ function displayTicketInfo() {
   ticketInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   
   // Atualiza a lista de ingressos do usuário
-  loadUserTickets();
+  // loadUserTickets();
 }
 
     // Mostrar informações do ingresso
@@ -854,6 +1244,11 @@ redeemButton.addEventListener('click', () => {
     alert('Este ingresso já foi resgatado');
     return;
   }
+
+   // Mostra estado de carregamento
+  redeemButton.disabled = true;
+  redeemButton.classList.add('sending');
+  redeemButton.textContent = '';
   
   const batch = db.batch();
   
@@ -868,18 +1263,16 @@ redeemButton.addEventListener('click', () => {
   // Adiciona ao perfil do usuário
   const userTicketRef = db.collection("users").doc(currentUser.uid).collection("tickets").doc(currentTicket.id);
   
-  // Cria o objeto do ticket com verificação para campos undefined
   const userTicketData = {
     eventId: currentTicket.eventId,
     ticketId: currentTicket.id,
     dataResgate: firebase.firestore.FieldValue.serverTimestamp()
   };
   
-  // Adiciona tipo apenas se existir e não for undefined
   if (currentTicket.tipo) {
     userTicketData.tipo = currentTicket.tipo;
   } else {
-    userTicketData.tipo = "Não especificado"; // Valor padrão
+    userTicketData.tipo = "Não especificado";
   }
   
   batch.set(userTicketRef, userTicketData);
@@ -892,7 +1285,10 @@ redeemButton.addEventListener('click', () => {
   
   batch.commit()
     .then(() => {
-      showSuccess('Ingresso resgatado com sucesso!');
+      return sendConfirmationEmail(currentUser.email, currentTicket);
+    })
+    .then(() => {
+      showSuccess('Ingresso resgatado com sucesso! Um e-mail de confirmação foi enviado.');
       currentTicket.resgatado = true;
       currentTicket.uidResgatado = currentUser.uid;
       displayTicketInfo();
@@ -900,9 +1296,63 @@ redeemButton.addEventListener('click', () => {
     .catch((error) => {
       console.error("Erro ao resgatar ingresso: ", error);
       showError('Ocorreu um erro ao resgatar o ingresso. Tente novamente.');
+    })
+    .finally(() => {
+      redeemButton.disabled = false;
+      redeemButton.classList.remove('sending');
+      redeemButton.textContent = 'Resgatar Ingresso';
     });
 });
 
+const sendConfirmationEmail = (userEmail, ticket) => {
+  const event = events.find(e => e.id === ticket.eventId);
+  
+  // Formata a data para o padrão brasileiro
+  const formatarData = (data) => {
+    return new Date(data).toLocaleString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const templateParams = {
+    to_email: userEmail,
+    user_name: currentUser.displayName || "Cliente HP",
+    event_name: event ? event.nome : "Evento HP",
+    ticket_code: ticket.id,
+    ticket_type: ticket.tipo || "Não especificado",
+    resgate_date: formatarData(new Date()), // Data formatada
+    reply_to: "hpinvegas@gmail.com",
+    from_name: "HP Tickets",
+    subject: `[HP Tickets] Ingresso ${ticket.id} resgatado`
+  };
+
+  // Mostra loading no botão
+  redeemButton.innerHTML = '<i class="ri-loader-4-line spin"></i> Processando...';
+  redeemButton.disabled = true;
+
+  emailjs.send("service_ap67ido","template_xm8q59f", templateParams)
+    .then(() => {
+      console.log('E-mail enviado com sucesso!');
+      // Adiciona estilo de confirmação
+      redeemButton.innerHTML = '<i class="ri-check-line"></i> Resgatado!';
+      redeemButton.style.backgroundColor = '#4BB543';
+    })
+    .catch((error) => {
+      console.error('Falha no envio:', error);
+      // Mostra erro e permite tentar novamente
+      redeemButton.innerHTML = '<i class="ri-error-warning-line"></i> Erro ao enviar';
+      redeemButton.style.backgroundColor = '#ff3333';
+      setTimeout(() => {
+        redeemButton.innerHTML = 'Resgatar Ingresso';
+        redeemButton.style.backgroundColor = '';
+        redeemButton.disabled = false;
+      }, 3000);
+    });
+};
     // Inicializar aplicação
     checkAuth();
   </script>
