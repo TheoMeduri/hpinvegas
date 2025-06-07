@@ -38,6 +38,7 @@ function initAuth() {
     }
 
     try {
+            state.usuario = user; // Adiciona esta linha
       const userDoc = await db.collection('users').doc(user.uid).get();
       
       if (!userDoc.exists || !userDoc.data().isAdmin) {
